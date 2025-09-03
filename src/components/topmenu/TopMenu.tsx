@@ -16,7 +16,7 @@ export default function Name() {
         <div>
             <Section
                 className="mb-4 flex justify-between items-center bg-cyan-700 dark:bg-cyan-950 rounded-bl-3xl rounded-br-3xl"
-                children={
+                content={
                     <>
                         <Link href={"/"}>
                             <YairAcunaIcon size={40} darkColor="white" lightColor="var(--color-primary-100)" className="ml-10" />

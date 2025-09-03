@@ -1,14 +1,14 @@
 'use client';
 
 interface Props {
-    children: React.ReactNode;
+    content: React.ReactNode;
     className?: string;
 }
 
-export default function Section({ children, className }: Props) {
+export default function Section({ content, className }: Props) {
     return (
         <div className={`mx-32 p-4 ${className}`}>
-            {children}
+            {content}
         </div>
     );
 }

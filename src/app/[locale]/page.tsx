@@ -10,7 +10,7 @@ export default function Home() {
 
   return (
     <div>
-      <Section children={
+      <Section content={
         <div className="flex gap-44 justify-center mt-10">
           <div className="flex flex-col items-center justify-center">
             <h1 className="text-9xl font-black">YAIR ACUÑA</h1>
@@ -35,14 +35,14 @@ export default function Home() {
         className="px-5"
       />
 
-      <Section children={
+      <Section content={
         <div className="flex items-center my-10">
           <div className="w-5 h-5 bg-primary-950 dark:bg-white rounded-full"></div>
           <div className="flex-1 border-b-4"></div>
         </div>
       } />
 
-      <Section children={
+      <Section content={
         <div>
           <Text segments={[
             { text: t('Feature 1'), color: "text-primary-700 dark:text-primary-200", size: "3xl", breakAfter: true },
