@@ -1,0 +1,21 @@
+{
+  "Layout": {
+    "TopButtons": {
+      "About me": "Sobre mí",
+      "Skills": "Habilidades",
+      "Projects": "Proyectos",
+      "Contact": "Contáctame"
+    }
+  },
+  "Home": {
+    "What I am": "Desarrollador Full-Stack",
+    "Feature 1": "Mi enfoque profesional",
+    "Feature 2": "Comunicación y colaboración",
+    "Feature 3": "Forma de trabajar",
+    "Feature 4": "Aprendizaje continuo",
+    "Feature 1 desc": "Trabajo con una visión clara y orientada a resultados, priorizando la calidad en cada proyecto y adaptándome a las necesidades de cada cliente.",
+    "Feature 2 desc": "Mantengo reuniones periódicas para evaluar avances, resolver dudas y fomentar un flujo constante de ideas que enriquezcan el trabajo en equipo.",
+    "Feature 3 desc": "Organizo cada etapa del proyecto con transparencia y planificación, asegurando eficiencia y cumplimiento de los objetivos establecidos.",
+    "Feature 4 desc": "Me mantengo en constante actualización mediante el estudio autodidacta, integrando nuevas herramientas y tendencias para ofrecer soluciones innovadoras."
+  }
+}
