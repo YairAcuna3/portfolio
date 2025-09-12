@@ -30,6 +30,7 @@ import {
   SiHaskell,
   SiRedis,
   SiTerraform,
+  SiUnity,
 } from "react-icons/si";
 import {
   TbBrandCSharp,
@@ -90,4 +91,5 @@ export const iconTechMap = {
   haskell: SiHaskell,
   redis: SiRedis,
   terraform: SiTerraform,
+  unity: SiUnity,
 };

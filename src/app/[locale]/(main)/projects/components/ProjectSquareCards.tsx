@@ -24,11 +24,12 @@ export default function ProjectCard({ project, session, deleted }: Props) {
             {/* Image */}
             {project.images.length > 0 ? (
                 <div className="flex justify-center mb-2 w-full">
-                    <div className="w-[432px] h-[300px] rounded-md flex-shrink-0 border-1 border-img-border dark:border-img-border-drk">
+                    <div className="w-[432px] h-[300px] rounded-md flex-shrink-0 border-1 border-img-border dark:border-img-border-drk relative">
                         <Image
                             src={project.images[0].url}
                             alt="Miniatura de proyecto"
-                            className="w-full h-full object-cover rounded-sm"
+                            className="object-cover rounded-sm"
+                            fill
                             draggable={false}
                         />
                     </div>

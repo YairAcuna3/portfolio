@@ -31,7 +31,12 @@ export default function GreatAlert({ onClose, isOpen, title, text }: Props) {
                 </div>
 
                 <div className="w-1/3 bg-primary-900 flex items-center justify-center">
-                    <Image src="/imgs/famicat.png" alt="Imagen" className="h-[90%] w-auto object-contain" />
+                    <Image
+                        src="/imgs/famicat.png"
+                        alt="Imagen"
+                        className="h-[90%] w-auto object-contain"
+                        fill
+                    />
                 </div>
             </div>
         </div>

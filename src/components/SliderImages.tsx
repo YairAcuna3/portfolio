@@ -52,6 +52,7 @@ export default function SliderImages({ images }: Props) {
                     draggable={false}
                     className={`absolute top-0 left-0 w-full h-full object-cover transition-transform duration-300 ease-in-out
             ${index === currentIndex ? 'translate-x-0' : index < currentIndex ? '-translate-x-full' : 'translate-x-full'}`}
+                    fill
                 />
             ))}
         </div>

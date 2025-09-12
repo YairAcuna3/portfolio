@@ -1,4 +1,3 @@
-export { default as ModalTechnologies } from "./ModalTechnologies";
 export { default as TechnologiesPanel } from "./TechnologiesPanel";
 export { default as ImagesPanel } from "./ImagesPanel";
 export { default as LinksPanel } from "./LinksPanel";

@@ -22,20 +22,20 @@ export const contactLinks = [
   },
   {
     id: 3,
-    href: "https://www.youtube.com/@yairacuna1805",
-    label: "YairDev3",
+    href: "https://www.youtube.com/@yairacuna.dev3",
+    label: "Yair Acuña",
     icon: YouTubeIcon,
   },
-  {
-    id: 4,
-    href: "https://www.facebook.com/YairDev3",
-    label: "YairDev3",
-    icon: FacebookIcon,
-  },
+  // {
+  //   id: 4,
+  //   href: "https://www.facebook.com/YairDev3",
+  //   label: "YairDev3",
+  //   icon: FacebookIcon,
+  // },
   {
     id: 5,
-    href: "https://www.instagram.com/YairDev3",
-    label: "YairDev3",
+    href: "https://www.instagram.com/yair.dev3/",
+    label: "@yair.dev3",
     icon: InstagramIcon,
   },
   {

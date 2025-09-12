@@ -42,7 +42,7 @@ export const createProjectHandler = async (
     if (imageFiles.length > 0) {
       const uploadResults = await Promise.all(
         imageFiles.map((file: File) =>
-          uploadImage(file, `portfolio/${createdData.name}`)
+          uploadImage(file, `portfolio/${createdData.id}`)
         )
       );
       const urls: string[] = [];

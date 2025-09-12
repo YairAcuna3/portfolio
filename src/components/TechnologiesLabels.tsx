@@ -4,14 +4,16 @@ import { IconMapTechsKeys } from "@/types/icon";
 import { OnlyTechnology } from "@/types/technology";
 import { iconTechMap } from "@/utils/iconTechMap";
 import { useEffect, useState } from "react";
+import { TrashIcon } from "./icons";
 
 interface Props {
     className?: string;
     technologies: OnlyTechnology[];
     maxVisible?: number;
+    onRemoveTechnology?: (techName: string) => void
 }
 
-export default function TechnologiesLabels({ className, technologies, maxVisible }: Props) {
+export default function TechnologiesLabels({ className, technologies, maxVisible, onRemoveTechnology }: Props) {
     const [extraTechnologies, setExtraTechnologies] = useState(0);
     useEffect(() => {
         if (maxVisible) {
@@ -42,6 +44,16 @@ export default function TechnologiesLabels({ className, technologies, maxVisible
                             <span className="pl-2 py-1 whitespace-nowrap text-white">
                                 {tech.name}
                             </span>
+                            {onRemoveTechnology && (
+                                <TrashIcon
+                                    size={20}
+                                    darkColor="white"
+                                    lightColor="var(--color-primary-200)"
+                                    className='cursor-pointer ml-4'
+                                    onClick={() => onRemoveTechnology(tech.name)}
+
+                                />
+                            )}
                         </div>
                     ) : (
                         <div
@@ -56,7 +68,7 @@ export default function TechnologiesLabels({ className, technologies, maxVisible
                     );
                 })
             ) : (
-                <div className="text-amber-200">Sin tecnologías registradas</div>
+                !onRemoveTechnology && <div className="text-amber-200">Sin tecnologías registradas</div>
             )}
 
             {extraTechnologies > 0 && (

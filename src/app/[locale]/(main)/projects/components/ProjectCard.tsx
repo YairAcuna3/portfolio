@@ -42,12 +42,13 @@ export default function ProjectCard({ project, session, deleted }: Props) {
                     project.images.slice(0, 4).map((pro) => (
                         <div
                             key={pro.id}
-                            className="w-[160px] h-[90px] rounded-md flex-shrink-0 border-1 border-img-border dark:border-img-border-drk"
+                            className="w-[160px] h-[90px] rounded-md flex-shrink-0 border-1 border-img-border dark:border-img-border-drk relative"
                         >
                             <Image
                                 src={pro.url}
                                 alt="Miniatura de proyecto"
-                                className="w-full h-full object-cover rounded-md"
+                                className="object-cover rounded-md"
+                                fill
                                 draggable={false}
                             />
                         </div>

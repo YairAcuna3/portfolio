@@ -7,4 +7,6 @@ export { default as YouTubeIcon } from "./IconYoutube";
 export { default as EditIcon } from "./IconEdit";
 export { default as TrashIcon } from "./IconTrash";
 export { default as RefreshIcon } from "./IconRefresh";
+export { default as GridIcon } from "./IconGrid";
+export { default as MenuIcon } from "./IconMenu";
 //export { default as YouTubeIcon } from "./IconYoutube";

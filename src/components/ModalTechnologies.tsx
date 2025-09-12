@@ -18,7 +18,7 @@ export default function ModalTechnologies({ technologies, isOpen, onClose, onAdd
     const [selectedTech, setSelectedTech] = useState<OnlyTechnology | null>(null);
 
     useEffect(() => {
-        let filtered = technologies;
+        let filtered = technologies || [];
 
         if (searchTerm.trim() !== '') {
             filtered = filtered.filter((tech) =>
@@ -62,7 +62,7 @@ export default function ModalTechnologies({ technologies, isOpen, onClose, onAdd
                             placeholder="Buscar..."
                             value={searchTerm}
                             onChange={handleInputChange}
-                            className="w-full border border-primary-300 bg-primary-900 rounded-md pr-10 pl-5 py-2 focus:outline-none focus:ring-2 focus:ring-primary-400"
+                            className="w-full pr-10 pl-5 py-2 border border-primary-300 bg-primary-900 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-400"
                         />
                         <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
                             <LensIcon size={25} lightColor="var(--color-primary-200)" darkColor="white" />

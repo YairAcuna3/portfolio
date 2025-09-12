@@ -28,13 +28,18 @@ export default function ImagesPanel({ imageFiles, imageUrls = [], onAddImage, re
                     {combinedImages.map((img, i) => (
                         <div
                             key={img.type === "url" ? img.value.id : `file-${i}`}
-                            className="flex gap-4 items-center justify-between py-2 px-8 rounded-lg hover:text-white hover:bg-primary-700 transition-colors"
+                            className="flex gap-4 items-center justify-between py-2 px-8 rounded-lg hover:text-white hover:bg-primary-700 transition-colors relative h-[320px]"
                         >
-                            <Image
-                                src={img.type === "url" ? img.value.url : URL.createObjectURL(img.value)}
-                                alt={img.type === "url" ? `image-${img.value.id}` : img.value.name}
-                                className="w-[91%] h-auto object-cover rounded-md shadow"
-                            />
+                            <div className="relative w-[91%] h-full rounded-md shadow">
+                                <Image
+                                    src={img.type === "url" ? img.value.url : URL.createObjectURL(img.value)}
+                                    alt={img.type === "url" ? `image-${img.value.id}` : img.value.name}
+                                    fill
+                                    style={{ objectFit: "contain" }} // <-- Cambiado a contain
+                                    className="rounded-md"
+                                    draggable={false}
+                                />
+                            </div>
                             <TrashIcon
                                 size={20}
                                 darkColor="white"
@@ -48,9 +53,10 @@ export default function ImagesPanel({ imageFiles, imageUrls = [], onAddImage, re
                             />
                         </div>
                     ))}
-
                 </div>
             </div>
+
+
             <label className="cursor-pointer w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 text-center block">
                 Subir otra…
                 <input

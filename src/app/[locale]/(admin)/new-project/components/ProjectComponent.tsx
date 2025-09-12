@@ -6,7 +6,8 @@ import GreatAlert from '@/components/GreatAlert';
 import LoadingOverlay from '@/components/LoadingOverlay';
 import { OnlyTechnology, Project } from '@/types';
 import { useImageFiles, useLinks, useProjectDetails, useTechnologies } from '../hooks';
-import { FormProject, ImagesPanel, LinksPanel, TechnologiesPanel, ModalTechnologies } from '.';
+import { FormProject, ImagesPanel, LinksPanel, TechnologiesPanel } from '.';
+import ModalTechnologies from '@/components/ModalTechnologies';
 
 interface Props {
     project?: Project;
