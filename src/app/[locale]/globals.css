@@ -12,6 +12,19 @@
   --color-primary-800: #005f78;
   --color-primary-900: #104e64;
   --color-primary-950: #053345;
+
+  --color-labels-bg: #00b8db;
+  --color-labels-bg-drk: #1e2939;
+  --color-labels-title: #053345;
+  --color-labels-title-drk: #a2f4fd;
+  --color-labels-text: #104e64;
+  --color-labels-text-drk: #ffffff;
+  --color-img-border: #a2f4fd;
+  --color-img-border-drk: #364153;
+  --color-btn: #cefafe;
+  --color-btn-hover: #a2f4fd;
+  --color-btn-drk: #0092b8;
+  --color-btn-drk-hover: #007595;
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -29,7 +42,7 @@
 }
 
 .dark {
-  --background: #1d2421;
+  --background: #101828;
   --foreground: #ffffff;
 }
 

@@ -8,6 +8,7 @@ interface Props {
     link: string;
     icon?: React.ReactNode;
     className?: string;
+    target?: "_blank" | "_self";
 }
 
 export default function CustomButton({
@@ -17,11 +18,13 @@ export default function CustomButton({
     textColor = "text-white",
     link,
     icon,
-    className
+    className,
+    target,
 }: Props) {
     return (
         <a
             href={link}
+            target={target}
             className={`inline-flex items-center px-5 py-2 transition-colors ${color} ${hover} ${textColor} ${className}`}
         >
             {icon && <span>{icon}</span>}

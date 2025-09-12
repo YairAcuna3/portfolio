@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Mulish } from "next/font/google";
 import "./globals.css";
-import TopMenu from "@/components/topmenu/TopMenu";
-import Footer from "@/components/Footer";
-import { hasLocale, NextIntlClientProvider } from "next-intl";
+import { hasLocale } from "next-intl";
 import { routing } from "@/i18n/routing";
 import { notFound } from "next/navigation";
 
@@ -15,6 +13,9 @@ const mulish = Mulish({
 export const metadata: Metadata = {
   title: "Yair Acuña - Portfolio",
   description: "TODO",
+  icons: {
+    icon: "/favicon.ico",
+  }
 };
 
 interface Props {
@@ -30,14 +31,8 @@ export default async function RootLayout({ children, params }: Props) {
 
   return (
     <html lang={locale}>
-      <body
-        className={`flex flex-col min-h-screen ${mulish.className} antialiased`}
-      >
-        <NextIntlClientProvider>
-          <TopMenu />
-          <main className="flex-grow">{children}</main>
-          <Footer />
-        </NextIntlClientProvider>
+      <body className={`${mulish.className} antialiased`}>
+        {children}
       </body>
     </html>
   );

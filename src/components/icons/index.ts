@@ -1,0 +1,10 @@
+export { default as EmailIcon } from "./IconEmail";
+export { default as FacebookIcon } from "./IconFacebook";
+export { default as GitHubIcon } from "./IconGitHub";
+export { default as InstagramIcon } from "./IconInstagram";
+export { default as LinkedInIcon } from "./IconLinkedIn";
+export { default as YouTubeIcon } from "./IconYoutube";
+export { default as EditIcon } from "./IconEdit";
+export { default as TrashIcon } from "./IconTrash";
+export { default as RefreshIcon } from "./IconRefresh";
+//export { default as YouTubeIcon } from "./IconYoutube";

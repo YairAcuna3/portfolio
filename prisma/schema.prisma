@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Project {
+  id           String       @id @default(uuid())
+  name         String
+  slug         String       @unique
+  description  String?
+  type         String?
+  madeFor      String?
+  images       Image[]
+  technologies Technology[]
+  links        Link[]
+  startAt      DateTime?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime?
+  deleted      Boolean      @default(false)
+}
+
+model Technology {
+  id       String    @id @default(uuid())
+  name     String    @unique
+  icon     String?
+  color    String?
+  projects Project[]
+}
+
+model Image {
+  id        String   @id @default(uuid())
+  url       String
+  project   Project  @relation(fields: [projectId], references: [id])
+  projectId String
+  createdAt DateTime @default(now())
+
+  @@index([projectId])
+}
+
+model Link {
+  id        String   @id @default(uuid())
+  type      String
+  url       String
+  icon      String?
+  project   Project  @relation(fields: [projectId], references: [id])
+  projectId String
+  createdAt DateTime @default(now())
+
+  @@index([projectId])
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String?
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+}

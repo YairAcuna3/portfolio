@@ -15,7 +15,7 @@ export default function LanguageSwitcher() {
     };
 
     return (
-        <select className={"text-primary-100 dark:text-white bg-primary-700 dark:bg-primary-950"} value={locale} onChange={(e) => changeLanguage(e.target.value)}>
+        <select className={"text-primary-100 dark:text-white bg-primary-700 dark:bg-gray-800"} value={locale} onChange={(e) => changeLanguage(e.target.value)}>
             {locales.map((loc) => (
                 <option key={loc} value={loc}>
                     {loc.toUpperCase()}

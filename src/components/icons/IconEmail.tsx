@@ -2,16 +2,18 @@
 
 import { useDarkMode } from "@/hooks/useDarkMode";
 import { IconProps } from "@/types/icon";
+import Link from "next/link";
 
 const EmailIcon = ({
     size = 24,
     lightColor = "#000000",
     darkColor = "#ffffff",
     className,
+    href,
 }: IconProps) => {
     const isDark = useDarkMode();
 
-    return (
+    const svg = (
         <svg
             width={size}
             height={size}
@@ -27,6 +29,13 @@ const EmailIcon = ({
                 <path d="M454 760 c-209 -221 -380 -405 -382 -411 -2 -5 404 -9 1062 -9 670 0 1066 4 1066 10 0 10 -745 803 -759 808 -5 2 -71 -51 -147 -117 -77 -67 -147 -121 -157 -121 -10 0 -79 53 -153 118 -74 64 -138 118 -143 120 -5 2 -179 -178 -387 -398z" />
             </g>
         </svg>
+    )
+    return href ? (
+        <Link href={href} >
+            {svg}
+        </Link>
+    ) : (
+        svg
     );
 };
 

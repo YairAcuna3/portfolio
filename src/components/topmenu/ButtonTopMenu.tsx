@@ -15,8 +15,8 @@ export default function ButtonTopMenu({ text, link, icon }: Props) {
             text={text}
             icon={icon}
             textColor="text-primary-950 dark:text-white"
-            color="bg-primary-100 dark:bg-primary-900"
-            hover="hover:bg-primary-200 dark:hover:bg-primary-800"
+            color="bg-primary-100 dark:bg-primary-600"
+            hover="hover:bg-primary-200 dark:hover:bg-primary-700"
             className="rounded-lg"
         />
     );
