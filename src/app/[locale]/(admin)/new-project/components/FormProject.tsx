@@ -1,14 +1,16 @@
 'use client';
 
 import { useMemo } from "react";
-import { createProjectHandler } from "../handlers/createProjectHandler";
 import { CreateProjectHandlerProps } from "@/types/project";
-import { updateProjectHandler } from "../handlers/updateProjectHandler";
 import { useRouter } from "next/navigation";
+import { createProjectHandler, updateProjectHandler } from "../handlers";
 
 type FormProjectProps = CreateProjectHandlerProps & {
     setName: (name: string) => void;
     setDescription: (description: string) => void;
+    setType: (type: string) => void;
+    setMadeFor: (madeFor: string) => void;
+    setStartAt: (startAt: Date | null) => void;
     projectId: string;
 };
 
@@ -16,11 +18,17 @@ export default function FormProject({
     projectTechs,
     imageFiles,
     links,
+
     setIsLoading,
     setIsGreatAlert,
+
     details,
     setName,
     setDescription,
+    setType,
+    setMadeFor,
+    setStartAt,
+
     projectId,
 }: FormProjectProps) {
     const router = useRouter();
@@ -42,7 +50,6 @@ export default function FormProject({
                             imageFiles,
                             links,
                             setIsLoading,
-                            setIsGreatAlert,
                             details,
                             id: projectId,
                             router,
@@ -73,14 +80,57 @@ export default function FormProject({
                     </div>
 
                     <div>
-                        <label htmlFor="icon" className="block text-sm font-medium text-primary-200 mb-2">
+                        <label htmlFor="description" className="block text-sm font-medium text-primary-200 mb-2">
                             Descripción
                         </label>
                         <textarea
                             value={details.description || ""}
                             onChange={(e) => setDescription(e.target.value)}
-                            className="resize-none bg-gray-700 w-full h-[464px] px-4 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+                            className="resize-none bg-gray-700 w-full h-[200px] px-4 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
                             placeholder="Florea adecuadamente..."
+                        />
+                    </div>
+
+                    <div>
+                        <label htmlFor="type" className="block text-sm font-medium text-primary-200 mb-2">
+                            Tipo
+                        </label>
+                        <input
+                            type="text"
+                            value={details.type || ""}
+                            onChange={(e) => setType(e.target.value)}
+                            className="bg-gray-700 w-full px-4 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+                            placeholder="Web atómica"
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label htmlFor="madeFor" className="block text-sm font-medium text-primary-200 mb-2">
+                            Hecho para
+                        </label>
+                        <input
+                            type="text"
+                            value={details.madeFor || ""}
+                            onChange={(e) => setMadeFor(e.target.value)}
+                            className="bg-gray-700 w-full px-4 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+                            placeholder="Juventudes hitlerianas"
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label
+                            htmlFor="startAt"
+                            className="block text-sm font-medium text-primary-200 mb-2"
+                        >
+                            Fecha de inicio
+                        </label>
+                        <input
+                            type="date"
+                            value={details.startAt ? details.startAt.toISOString().split("T")[0] : ""}
+                            onChange={(e) => { setStartAt(e.target.value ? new Date(e.target.value) : null) }}
+                            className="bg-gray-700 w-full px-4 py-2 border border-primary-300 rounded-lg"
                         />
                     </div>
                 </div>

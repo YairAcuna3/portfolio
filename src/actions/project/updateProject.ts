@@ -8,6 +8,9 @@ type Input = {
   id: string;
   name: string;
   description?: string;
+  type?: string;
+  madeFor?: string;
+  startAt?: Date | null;
 };
 
 type Response = {
@@ -62,6 +65,9 @@ export async function updateProject(input: Input): Promise<Response> {
         name: input.name,
         slug,
         description: desc,
+        type: input.type ?? null,
+        madeFor: input.madeFor ?? null,
+        startAt: input.startAt ?? null,
         updatedAt: new Date(),
       },
     });

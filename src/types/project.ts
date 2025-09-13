@@ -30,8 +30,11 @@ export type CreateProjectHandlerProps = {
   imageFiles: File[];
   links: OnlyLink[];
   setIsLoading: Dispatch<React.SetStateAction<boolean>>;
-  setIsGreatAlert: Dispatch<React.SetStateAction<boolean>>;
+  setIsGreatAlert?: Dispatch<React.SetStateAction<boolean>>;
   details: ProjectDetails;
 };
 
-export type ProjectDetails = Pick<Project, "name" | "description">;
+export type ProjectDetails = Pick<
+  Project,
+  "name" | "description" | "type" | "madeFor" | "startAt"
+>;

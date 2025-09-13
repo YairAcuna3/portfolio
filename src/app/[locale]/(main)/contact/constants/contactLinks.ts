@@ -1,6 +1,5 @@
 import {
   EmailIcon,
-  FacebookIcon,
   GitHubIcon,
   InstagramIcon,
   LinkedInIcon,
@@ -28,7 +27,7 @@ export const contactLinks = [
   },
   // {
   //   id: 4,
-  //   href: "https://www.facebook.com/YairDev3",
+  //   href: "No existe xd",
   //   label: "YairDev3",
   //   icon: FacebookIcon,
   // },

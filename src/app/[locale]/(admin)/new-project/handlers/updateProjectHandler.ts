@@ -1,6 +1,7 @@
 import { updateLinksForProject } from "@/actions/link/updateLinksForProject";
 import { updateProject } from "@/actions/project/updateProject";
-import { CreateProjectHandlerProps } from "@/types";
+import { updateTechnologiesOfProject } from "@/actions/technology/updateTechsOfProject";
+import { CreateProjectHandlerProps, OnlyTechnology } from "@/types";
 import { useRouter } from "next/navigation";
 
 type UpdateProjectProps = CreateProjectHandlerProps & {
@@ -15,7 +16,6 @@ export const updateProjectHandler = async (
     imageFiles,
     links,
     setIsLoading,
-    setIsGreatAlert,
     details,
     id,
     router,
@@ -26,24 +26,33 @@ export const updateProjectHandler = async (
   try {
     const name = details.name;
     const description = details.description || "";
+    const type = details.type || "";
+    const madeFor = details.madeFor || "";
+    const startAt = details.startAt || null;
 
-    const projectUpdated = await updateProject({ id, name, description });
+    const projectUpdated = await updateProject({
+      id,
+      name,
+      description,
+      type,
+      madeFor,
+      startAt,
+    });
     if (!projectUpdated.data) {
       throw new Error("The data of the project doesn't exist!");
     }
     const updatedData = projectUpdated.data;
 
-    // Todo: Actualizar las tecnologías
-    // if (projectTechs.length > 0) {
-    //   const technologyIds = projectTechs.map((tech: OnlyTechnology) => tech.id);
-    //   const result = await addTechnologiesToProject({
-    //     projectId: createdData.id,
-    //     technologyIds,
-    //   });
-    //   if (!result.success) {
-    //     throw new Error(result.error || "Error saving technologies in DB");
-    //   }
-    // }
+    if (projectTechs.length > 0) {
+      const technologyIds = projectTechs.map((tech: OnlyTechnology) => tech.id);
+      const result = await updateTechnologiesOfProject({
+        projectId: updatedData.id,
+        technologyIds,
+      });
+      if (!result.success) {
+        throw new Error(result.error || "Error updating technologies in DB");
+      }
+    }
 
     // TODO: Un delete/upload de la imágenes + edit imágenes
     // if (imageFiles.length > 0) {
@@ -81,7 +90,6 @@ export const updateProjectHandler = async (
 
     router.replace(`/projects/${updatedData.slug}/edit`);
     setIsLoading(false);
-    //setIsGreatAlert(true);
   } catch (error) {
     console.error("The project cannot be uploaded :(", error);
     setIsLoading(false);

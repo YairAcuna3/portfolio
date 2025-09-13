@@ -1,7 +1,7 @@
 import { createImages, uploadImage } from "@/actions/image";
 import { createLinksForProject } from "@/actions/link/createLinksForProject";
 import { createProject } from "@/actions/project";
-import { addTechnologiesToProject } from "@/actions/relations/addTechsToProject";
+import { addTechnologiesToProject } from "@/actions/technology/addTechsToProject";
 import { CreateProjectHandlerProps, OnlyTechnology } from "@/types";
 import { UploadApiResponse } from "cloudinary";
 
@@ -21,8 +21,17 @@ export const createProjectHandler = async (
   try {
     const name = details.name;
     const description = details.description || "";
+    const type = details.type || "";
+    const madeFor = details.madeFor || "";
+    const startAt = details.startAt || null;
 
-    const projectCreated = await createProject({ name, description });
+    const projectCreated = await createProject({
+      name,
+      description,
+      type,
+      madeFor,
+      startAt,
+    });
     if (!projectCreated.data) {
       throw new Error("The data of the project doesn't exist!");
     }
@@ -75,7 +84,9 @@ export const createProjectHandler = async (
     }
 
     setIsLoading(false);
-    setIsGreatAlert(true);
+    {
+      setIsGreatAlert && setIsGreatAlert(true);
+    }
   } catch (error) {
     console.error("The project cannot be created :(", error);
     setIsLoading(false);

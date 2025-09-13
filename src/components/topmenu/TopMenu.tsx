@@ -24,7 +24,8 @@ export default function TopMenu({ session }: Props) {
 
     return (
         <div>
-            <header className="fixed top-0 left-0 right-0 mx-32 py-4 px-8 flex justify-between items-center bg-cyan-700 dark:bg-gray-800 rounded-bl-3xl rounded-br-3xl border-b border-primary-300 z-50">
+            <header className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center mx-32 py-4 px-8 bg-cyan-700 dark:bg-gray-800 border-b rounded-bl-3xl rounded-br-3xl border-primary-300">
+                {/* <header className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center py-2 px-4 bg-cyan-700 dark:bg-gray-800 border-b rounded-bl-3xl rounded-br-3xl border-primary-300"> */}
                 <YairAcunaIcon
                     size={40}
                     darkColor="white"

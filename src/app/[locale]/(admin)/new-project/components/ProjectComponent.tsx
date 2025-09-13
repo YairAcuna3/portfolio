@@ -1,13 +1,13 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { getTechnologies } from '@/actions/technology/getTechnologies';
 import GreatAlert from '@/components/GreatAlert';
 import LoadingOverlay from '@/components/LoadingOverlay';
 import { OnlyTechnology, Project } from '@/types';
 import { useImageFiles, useLinks, useProjectDetails, useTechnologies } from '../hooks';
 import { FormProject, ImagesPanel, LinksPanel, TechnologiesPanel } from '.';
 import ModalTechnologies from '@/components/ModalTechnologies';
+import { getTechnologies } from '@/actions/technology/getTechnologies';
 
 interface Props {
     project?: Project;
@@ -18,9 +18,12 @@ export default function ProjectComponent({ project }: Props) {
     const { projectTechs, addTechnology, removeTechnology } = useTechnologies(project?.technologies);
     const { imageFiles, imageUrls, addImage, removeImageFile, removeImageUrl } = useImageFiles(project?.images);
     const { links, addLink, removeLink } = useLinks(project?.links);
-    const { details, setName, setDescription } = useProjectDetails({
+    const { details, setName, setDescription, setType, setMadeFor, setStartAt } = useProjectDetails({
         name: project?.name ?? "",
-        description: project?.description ?? ""
+        description: project?.description ?? "",
+        type: project?.type ?? "",
+        madeFor: project?.madeFor || "",
+        startAt: project?.startAt || null,
     });
     const [isModalTech, setIsModalTech] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -56,11 +59,17 @@ export default function ProjectComponent({ project }: Props) {
                             projectTechs={projectTechs}
                             imageFiles={imageFiles}
                             links={links}
+
                             setIsLoading={setIsLoading}
                             setIsGreatAlert={setIsGreatAlert}
+
                             details={details}
                             setName={setName}
                             setDescription={setDescription}
+                            setType={setType}
+                            setMadeFor={setMadeFor}
+                            setStartAt={setStartAt}
+
                             projectId={project?.id || ""}
                         />
                     </div>

@@ -3,12 +3,13 @@ import { ProjectComponent } from "@/app/[locale]/(admin)/new-project/components"
 import { getSession } from "@/lib/getSession";
 import { notFound, redirect } from "next/navigation";
 
+
 interface Props {
-    params: { slug: string };
+    params: Promise<{ slug: string }>;
 }
 
 export default async function EditProject({ params }: Props) {
-    const { slug } = params;
+    const { slug } = await params;
     const session = await getSession();
     const project = await getProjectBySlug(slug);
 

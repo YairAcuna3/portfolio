@@ -7,6 +7,9 @@ import { generateUniqueSlug } from "@/utils/generateSlug";
 type Input = {
   name: string;
   description?: string;
+  type?: string;
+  madeFor?: string;
+  startAt?: Date | null;
 };
 
 type Response = {
@@ -58,8 +61,9 @@ export async function createProject(input: Input): Promise<Response> {
         slug: slug,
         description: desc,
         deleted: false,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        type: input.type ?? null,
+        madeFor: input.madeFor ?? null,
+        startAt: input.startAt ?? null,
       },
     });
 

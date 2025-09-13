@@ -9,11 +9,11 @@ import Link from "next/link";
 import { EditIcon } from "@/components/icons";
 
 interface Props {
-    params: { slug: string };
+    params: Promise<{ slug: string }>;
 }
 
 export default async function SpecificProjectPage({ params }: Props) {
-    const { slug } = params;
+    const { slug } = await params;
     const session = await getSession();
     const project = await getProjectBySlug(slug);
 
