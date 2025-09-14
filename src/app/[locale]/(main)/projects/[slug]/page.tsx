@@ -23,12 +23,13 @@ export default async function SpecificProjectPage({ params }: Props) {
     }
 
     return (
-        <main className="flex p-4 justify-center min-w-screen max-w-screen">
-            <div className="flex flex-col justify-between w-3/5 items-center">
-                <div className="flex flex-col px-[11%] w-full">
+        <main className="flex flex-col lg:flex-row p-4 px-6 sm:px-12 md:px-20 lg:px-0 justify-center min-w-screen max-w-screen">
+            <div className="flex flex-col justify-between items-center w-full lg:w-4/6 xl:w-3/5">
+
+                <div className="flex flex-col lg:px-[11%] w-full">
                     <div className="flex flex-col items-center w-full">
                         <div className="flex items-center w-full mt-5 mb-4">
-                            <h1 className="text-4xl font-bold text-labels-title dark:text-labels-title-drk mx-auto">
+                            <h1 className="text-center text-3xl lg:text-4xl font-bold text-labels-title dark:text-labels-title-drk mx-auto">
                                 {project.name}
                             </h1>
                             {session && (
@@ -42,11 +43,11 @@ export default async function SpecificProjectPage({ params }: Props) {
                             )}
                         </div>
 
-                        <p className="text-xl text-justify mb-5">
+                        <p className="text-lg lg:text-xl text-justify mb-5">
                             {project.description}
                         </p>
                     </div>
-                    <div className="flex justify-between text-gray-500 dark:text-primary-400 mb-6">
+                    <div className="flex flex-col md:flex-row justify-between text-gray-500 dark:text-primary-400 mb-6">
                         <div>
                             <span className="text-lg">
                                 {project.madeFor}
@@ -60,7 +61,8 @@ export default async function SpecificProjectPage({ params }: Props) {
                         </span>
                     </div>
                 </div>
-                <div className="flex w-7/9 justify-center items-center aspect-[16/9] text-center overflow-hidden border-2 border-gray-700 rounded-md mb-8">
+
+                <div className="flex w-full md:w-7/9 justify-center items-center aspect-[16/9] text-center overflow-hidden border-2 border-gray-700 rounded-md mb-8">
                     {project.images.length > 0 ? (
                         <SliderImages images={project.images} />
                     ) : (
@@ -72,19 +74,19 @@ export default async function SpecificProjectPage({ params }: Props) {
                 </div>
             </div>
 
-            <div className="flex flex-col w-1/5 items-center justify-between">
+            <div className="flex flex-col sm:flex-row lg:flex-col w-full lg:w-1/5 items-center justify-between">
                 <div className="flex flex-col items-center">
-                    <h1 className="my-6 text-2xl font-bold text-labels-title dark:text-labels-title-drk">
+                    <h1 className="my-6 text-center text-2xl font-bold text-labels-title dark:text-labels-title-drk">
                         Tecnologías utilizadas
                     </h1>
                     <TechnologiesLabels
                         technologies={project.technologies}
-                        className={"flex flex-col gap-3 mb-10 items-center overflow-y-scroll bg-gray-800 rounded-xl p-4 max-h-[550px]"}
+                        className={"flex flex-col gap-3 mb-10 items-center overflow-y-scroll bg-gray-800 rounded-xl p-4 sm:max-h-[550px]"}
                     />
                 </div>
                 <LinksButtons
                     links={project.links}
-                    className="flex flex-col gap-3 mb-8 items-end"
+                    className="flex flex-col gap-3 mb-auto lg:mb-8 mt-8 lg:mt-0 items-end"
                 />
             </div>
         </main>

@@ -32,13 +32,16 @@ export default function ContactForm() {
     };
 
     return (
-        <div className="flex justify-center w-full gap-6">
-            <form onSubmit={handleSubmit} className="self-center bg-gray-800 px-12 pt-10 pb-8 flex flex-col gap-3 rounded-xl w-1/2">
-                <h1 className="text-6xl mb-8 text-center">
+        <div className="flex flex-col lg:flex-row md:pt-4 lg:pt-0 justify-center w-full lg:gap-6">
+            <form
+                onSubmit={handleSubmit}
+                className="flex flex-col self-center px-12 pt-10 pb-8 w-9/10 lg:w-1/2 gap-3 bg-labels-bg dark:bg-labels-bg-drk rounded-xl"
+            >
+                <h1 className="text-3xl sm:text-4xl xl:text-6xl mb-8 text-center">
                     ¡Contáctame!
                 </h1>
                 <div className="flex justify-between mb-8">
-                    <div className="flex flex-col w-1/3 gap-3">
+                    <div className="flex flex-col w-full md:w-2/3 lg:w-full xl:w-3/5 gap-3">
                         <h2>Tu nombre:</h2>
                         <input
                             type="text"
@@ -58,7 +61,12 @@ export default function ContactForm() {
                             className="border p-3 rounded"
                         />
                     </div>
-                    <YairAcunaIcon size={150} />
+                    <YairAcunaIcon
+                        size={150}
+                        lightColor="var(--color-primary-100)"
+                        darkColor="white"
+                        className="hidden md:block lg:hidden xl:block"
+                    />
                 </div>
                 <h2>Deja aquí tu mensaje:</h2>
                 <input
@@ -66,7 +74,7 @@ export default function ContactForm() {
                     placeholder="Asunto (opcional)"
                     value={form.subject}
                     onChange={(e) => setForm({ ...form, subject: e.target.value })}
-                    className="w-1/2 border p-3 rounded"
+                    className="w-full md:w-2/3 lg:w-full xl:w-4/5  border p-3 rounded"
                 />
                 <textarea
                     placeholder="Tu mensaje"
@@ -78,19 +86,19 @@ export default function ContactForm() {
                 <div className="flex items-end w-full">
                     <button
                         type="submit"
-                        className="mt-4 w-1/4 ml-auto bg-btn-drk hover:bg-btn-drk-hover text-white px-4 py-2 rounded text-lg"
+                        className="mt-4 w-full sm:w-1/4 ml-auto bg-btn hover:bg-btn-hover dark:bg-btn-drk dark:hover:bg-btn-drk-hover dark:text-white px-4 py-2 rounded text-lg"
                     >
                         Enviar
                     </button>
                 </div>
             </form>
 
-            <div className="self-start flex flex-col bg-gray-800 w-2/9 px-12 py-8 my-20 rounded-xl gap-2">
-                <h2 className="text-4xl text-center mb-8">
+            <div className="self-center lg:self-start flex flex-col bg-labels-bg dark:bg-labels-bg-drk w-9/10 lg:w-3/10 xl:w-1/4 px-12 lg:px-8 xl:px-12 py-8 my-20 rounded-xl gap-2">
+                <h2 className="text-3xl sm:text-4xl lg:text-2xl xl:text-4xl text-center mb-8">
                     Más información
                 </h2>
                 {contactLinks.map(({ id, href, label, icon: Icon }) => {
-                    const baseClass = "flex gap-4 text-2xl items-center";
+                    const baseClass = "flex gap-4 text-xl sm:text-2xl lg:text-lg xl:text-xl items-center";
 
                     return href ? (
                         <a
@@ -100,12 +108,20 @@ export default function ContactForm() {
                             href={href}
                             className={baseClass}
                         >
-                            <Icon size={25} />
+                            <Icon
+                                size={25}
+                                lightColor="var(--color-primary-100)"
+                                darkColor="white"
+                            />
                             <p>{label}</p>
                         </a>
                     ) : (
                         <div key={id} className={baseClass}>
-                            <Icon size={25} />
+                            <Icon
+                                size={25}
+                                lightColor="var(--color-primary-100)"
+                                darkColor="white"
+                            />
                             <p>{label}</p>
                         </div>
                     )

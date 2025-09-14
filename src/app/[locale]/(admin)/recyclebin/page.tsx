@@ -9,7 +9,7 @@ export default async function Projects() {
     const session = await getSession();
 
     return (
-        <div className="p-4 min-w-screen max-w-screen">
+        <div className="p-4 pt-22 min-w-screen max-w-screen">
             <ProjectsList
                 projects={projects}
                 session={session}

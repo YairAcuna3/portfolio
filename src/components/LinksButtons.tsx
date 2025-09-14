@@ -22,10 +22,10 @@ export default function LinksButtons({ links, className }: Props) {
                         key={link.id}
                         href={link.url}
                         target="_blank"
-                        className={`flex px-4 items-center justify-between rounded-lg transition-colors bg-primary-100 dark:bg-primary-600 hover:bg-primary-200 dark:hover:bg-primary-700"`}
+                        className={`flex px-4 items-center justify-between rounded-lg border-1 dark:border-0 transition-colors bg-primary-100 hover:bg-primary-200 dark:bg-primary-600 dark:hover:bg-primary-700"`}
                     >
-                        <IconComponent size={15} className="text-white" />
-                        <span className="text-lg pl-2 py-1 whitespace-nowrap text-white">
+                        <IconComponent size={15} className="dark:text-white" />
+                        <span className="text-lg pl-2 py-1 whitespace-nowrap dark:text-white">
                             {link.type}
                         </span>
                     </a>
@@ -34,9 +34,9 @@ export default function LinksButtons({ links, className }: Props) {
                         key={link.id}
                         href={link.url}
                         target="_blank"
-                        className={`flex px-4 items-center justify-between rounded-lg transition-colors bg-primary-100 dark:bg-primary-600 hover:bg-primary-200 dark:hover:bg-primary-700"`}
+                        className={`flex px-4 items-center justify-between rounded-lg transition-colors bg-primary-100 hover:bg-primary-200 dark:bg-primary-600 dark:hover:bg-primary-700"`}
                     >
-                        <span className="text-lg py-1 whitespace-nowrap text-white">
+                        <span className="text-lg py-1 whitespace-nowrap dark:text-white">
                             {link.type}
                         </span>
                     </a>

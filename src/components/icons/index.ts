@@ -9,4 +9,8 @@ export { default as TrashIcon } from "./IconTrash";
 export { default as RefreshIcon } from "./IconRefresh";
 export { default as GridIcon } from "./IconGrid";
 export { default as MenuIcon } from "./IconMenu";
+export { default as YairAcunaIcon } from "./IconYairAcuna";
+export { default as LoginIcon } from "./IconLogIn";
+export { default as LogoutIcon } from "./IconLogOut";
+export { default as PlusSquareIcon } from "./IconSquarePlus";
 //export { default as YouTubeIcon } from "./IconYoutube";

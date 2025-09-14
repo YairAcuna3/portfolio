@@ -22,14 +22,14 @@ export default function ProjectsHeader({ view, setView, searchTerm, setSearchTer
     const [isModal, setIsModal] = useState(false);
 
     return (
-        <div className="flex flex-col justify-center pt-3 px-32">
-            <div className="flex relative items-center">
+        <div className="flex flex-col justify-center pt-3 px-6 xl:px-32">
+            <div className="flex relative items-center md:mt-6 xl:mt-0">
                 <h1
                     className="absolute left-1/2 transform -translate-x-1/2 text-6xl font-extrabold"
                 >
                     Proyectos
                 </h1>
-                <div className="flex items-center ml-auto">
+                <div className="hidden xl:flex items-center xl:ml-auto">
                     <p
                         className="mr-2 dark:text-gray-400"
                     >
@@ -48,8 +48,8 @@ export default function ProjectsHeader({ view, setView, searchTerm, setSearchTer
                 </div>
             </div>
 
-            <div className="relative flex mt-5">
-                <div className={`flex w-full items-center mb-2 ${selectedTechs.length > 0 ? "pt-12" : ""}`}>
+            <div className="flex flex-col relative mt-5">
+                <div className={`order-2 xl:order-1 flex w-full items-center mb-2 pt-4 xl:pt-0 ${selectedTechs.length > 0 ? "pt-4 xl:pt-12" : ""}`}>
                     <button
                         onClick={() => setIsModal(true)}
                         className="inline-flex items-center px-4 py-1 rounded-3xl bg-btn-drk hover:bg-btn-drk-hover"
@@ -64,18 +64,18 @@ export default function ProjectsHeader({ view, setView, searchTerm, setSearchTer
                         </p>
                     )}
                     <TechnologiesLabels
-                        className="flex ml-6 flex-1 overflow-x-auto gap-4"
+                        className="flex ml-6 flex-1 overflow-x-auto gap-4 py-4 xl:py-0"
                         technologies={selectedTechs}
                         onRemoveTechnology={onRemoveTechnology}
                     />
                 </div>
 
-                <div className="absolute right-0 top-4 transform -translate-y-1/2">
+                <div className="order-1 xl:order-2 flex xl:absolute xl:right-0 xl:top-4 xl:transform xl:-translate-y-1/2 pt-8 xl:pt-0">
                     <input
                         type="text"
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="border-2 border-white w-[450px] px-2 py-1 rounded"
+                        className="border-2 dark:border-white w-full xl:w-[450px] px-2 py-1 rounded"
                     />
                 </div>
             </div>

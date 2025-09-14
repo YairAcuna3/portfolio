@@ -7,6 +7,8 @@ import { EditIcon, RefreshIcon, TrashIcon } from "@/components/icons";
 import Link from "next/link";
 import { formatDate } from "@/utils/formatDate";
 import Image from "next/image";
+import { useBreakpoint } from "@/hooks/useBreakpoints";
+import { useEffect, useState } from "react";
 
 interface Props {
     project: ShowProject;
@@ -18,13 +20,15 @@ export default function ProjectCard({ project, session, deleted }: Props) {
     const handleToggleProject = async (slug: string, isDeleted: boolean) => {
         await toggleProject(slug, isDeleted);
     }
+    const breakpoint = useBreakpoint();
+    const techLimit = breakpoint === "2xl" ? 3 : 2;
 
     return (
-        <div className="flex flex-col items-center w-[480px] py-5 px-4 bg-labels-bg dark:bg-labels-bg-drk rounded-md shadow-md">
+        <div className="flex flex-col items-center w-[350px] xl:w-[480px] py-5 px-4 bg-labels-bg dark:bg-labels-bg-drk rounded-md shadow-md">
             {/* Image */}
             {project.images.length > 0 ? (
                 <div className="flex justify-center mb-2 w-full">
-                    <div className="w-[432px] h-[300px] rounded-md flex-shrink-0 border-1 border-img-border dark:border-img-border-drk relative">
+                    <div className="w-[304px] xl:w-[432px] h-[171px] xl:h-[300px] rounded-md flex-shrink-0 border-1 border-img-border dark:border-img-border-drk relative">
                         <Image
                             src={project.images[0].url}
                             alt="Miniatura de proyecto"
@@ -101,7 +105,7 @@ export default function ProjectCard({ project, session, deleted }: Props) {
 
                 <TechnologiesLabels
                     technologies={project.technologies}
-                    maxVisible={3}
+                    maxVisible={techLimit}
                     className={"flex gap-2 text-xs mt-4"}
                 />
             </div>

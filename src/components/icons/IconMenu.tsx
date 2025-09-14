@@ -8,10 +8,11 @@ const MenuIcon = ({
     lightColor = "#FFFFFF",
     darkColor = "#000000",
     className,
+    onClick,
 }: IconProps) => {
     const isDark = useDarkMode();
 
-    return (
+    const svg = (
         <svg
             width={size}
             height={size}
@@ -30,6 +31,20 @@ const MenuIcon = ({
             </g>
         </svg>
     );
+
+    if (onClick) {
+        return (
+            <button
+                onClick={onClick}
+                className="bg-transparent border-none p-0 cursor-pointer"
+                aria-label="icon-button"
+            >
+                {svg}
+            </button>
+        );
+    }
+
+    return svg;
 };
 
 export default MenuIcon;

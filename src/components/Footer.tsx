@@ -5,17 +5,21 @@ import YairAcunaIcon from "./icons/IconYairAcuna";
 
 export default function Footer() {
     return (
-        <footer className="flex justify-between py-8 px-20 bg-primary-700 dark:bg-gray-800 text-white border-t-1 border-t-primary-300">
+        <footer className="flex justify-between py-6 md:py-8 px-4 md:px-20 bg-primary-700 dark:bg-gray-800 text-white border-t-1 border-t-primary-300">
             <div className="flex gap-5 items-center">
                 <YairAcunaIcon
                     size={40}
                     darkColor="white"
                     lightColor="var(--color-primary-100)"
-                    className="ml-10"
                 />
-                <p className="text-primary-100 dark:text-white">
-                    © {new Date().getFullYear()} Yair Acuña.
-                </p>
+                <div className="flex flex-col sm:flex-row">
+                    <p className="text-primary-100 dark:text-white mr-2">
+                        © {new Date().getFullYear()}
+                    </p>
+                    <p>
+                        Yair Acuña.
+                    </p>
+                </div>
             </div>
             <div className="flex gap-5">
                 <GitHubIcon
