@@ -1,5 +1,6 @@
 'use client';
 
+import Button from "@/components/buttons/Button";
 import { GridIcon, MenuIcon } from "@/components/icons";
 import ModalTechnologies from "@/components/ModalTechnologies";
 import TechnologiesLabels from "@/components/TechnologiesLabels";
@@ -50,12 +51,7 @@ export default function ProjectsHeader({ view, setView, searchTerm, setSearchTer
 
             <div className="flex flex-col relative mt-5">
                 <div className={`order-2 xl:order-1 flex w-full items-center mb-2 pt-4 xl:pt-0 ${selectedTechs.length > 0 ? "pt-4 xl:pt-12" : ""}`}>
-                    <button
-                        onClick={() => setIsModal(true)}
-                        className="inline-flex items-center px-4 py-1 rounded-3xl bg-btn-drk hover:bg-btn-drk-hover"
-                    >
-                        Añadir filtro
-                    </button>
+                    <Button variant="oval" type="action" onClick={() => setIsModal(true)} text="Añadir filtro" />
                     {selectedTechs.length == 0 && (
                         <p
                             className="ml-2 dark:text-gray-400"

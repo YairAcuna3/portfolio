@@ -9,6 +9,7 @@ import { formatDate } from "@/utils/formatDate";
 import Image from "next/image";
 import { useBreakpoint } from "@/hooks/useBreakpoints";
 import { useEffect, useState } from "react";
+import Button from "@/components/buttons/Button";
 
 interface Props {
     project: ShowProject;
@@ -26,23 +27,30 @@ export default function ProjectCard({ project, session, deleted }: Props) {
     return (
         <div className="flex flex-col items-center w-[350px] xl:w-[480px] py-5 px-4 bg-labels-bg dark:bg-labels-bg-drk rounded-md shadow-md">
             {/* Image */}
-            {project.images.length > 0 ? (
-                <div className="flex justify-center mb-2 w-full">
-                    <div className="w-[304px] xl:w-[432px] h-[171px] xl:h-[300px] rounded-md flex-shrink-0 border-1 border-img-border dark:border-img-border-drk relative">
-                        <Image
-                            src={project.images[0].url}
-                            alt="Miniatura de proyecto"
-                            className="object-cover rounded-sm"
-                            fill
-                            draggable={false}
-                        />
+            <div className="relative">
+                {project.images.length > 0 ? (
+                    <div className="flex justify-center mb-2 w-full">
+                        <div className="w-[304px] xl:w-[432px] h-[171px] xl:h-[300px] rounded-md flex-shrink-0 border-1 border-img-border dark:border-img-border-drk relative">
+                            <Image
+                                src={project.images[0].url}
+                                alt="Miniatura de proyecto"
+                                className="object-cover rounded-sm"
+                                fill
+                                draggable={false}
+                            />
+                        </div>
                     </div>
-                </div>
-            ) : (
-                <p className="flex my-8 text-yellow-200">
-                    Sin imágenes registradas
-                </p>
-            )}
+                ) : (
+                    <p className="flex my-8 text-yellow-200">
+                        Sin imágenes registradas
+                    </p>
+                )}
+                {/* Imagen como link */}
+                <Link
+                    href={`/projects/${project.slug}`}
+                    className="absolute inset-0"
+                />
+            </div>
 
             {/* tittle and desc */}
             <div className="w-full px-4">
@@ -76,31 +84,14 @@ export default function ProjectCard({ project, session, deleted }: Props) {
                 <div className="flex gap-2 items-center">
                     {session && (
                         <>
-                            <Link
-                                href={`projects/${project.slug}/edit`}
-                                className={`items-center px-3 py-2 transition-colors bg-primary-100 dark:bg-primary-600 hover:bg-primary-200 dark:hover:bg-primary-700 rounded-lg`}
-                            >
-                                <EditIcon size={20} />
-                            </Link>
-                            <div
-                                className={`items-center px-3 pt-2 pb-1 transition-colors bg-primary-100 dark:bg-primary-600 hover:bg-primary-200 dark:hover:bg-primary-700 rounded-lg`}
-                            >
-                                {!deleted ?
-                                    <TrashIcon size={20} onClick={() => handleToggleProject(project.slug, !deleted)} />
-                                    :
-                                    <RefreshIcon size={20} onClick={() => handleToggleProject(project.slug, !deleted)} />
-                                }
-                            </div>
+                            <Button link={`projects/${project.slug}/edit`} icon={<EditIcon size={20} />} size="square" />
+                            <Button size="square" type="action"
+                                icon={!deleted ? <TrashIcon size={20} /> : <RefreshIcon size={20} />}
+                                onClick={() => handleToggleProject(project.slug, !deleted)}
+                            />
                         </>
                     )}
-                    <a
-                        href={`/projects/${project.slug}`}
-                        className={`items-center px-3 py-2 transition-colors bg-primary-100 dark:bg-primary-600 hover:bg-primary-200 dark:hover:bg-primary-700 rounded-lg`}
-                    >
-                        <span className="text-sm text-center text-primary-950 dark:text-white">
-                            Ver detalles
-                        </span>
-                    </a>
+                    <Button size="sm" text="Ver detalles" link={`/projects/${project.slug}`} />
                 </div>
 
                 <TechnologiesLabels

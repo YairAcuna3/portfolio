@@ -8,7 +8,7 @@ export async function getLastProject() {
       deleted: false,
     },
     orderBy: {
-      createdAt: "desc",
+      startAt: "desc",
     },
     include: {
       images: true,

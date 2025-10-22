@@ -68,19 +68,24 @@ export default function Home() {
           { text: t('Feature 1'), color: "text-primary-700 dark:text-primary-200", size: "text-2xl sm:text-3xl", breakAfter: true },
           { text: t('Feature 1 desc') }
         ]} fontSize="text-xl sm:text-2xl" className="mb-8 w-full xl:w-2/6" />
-        <div className="lg:mb-8 w-full xl:w-3/5 lg:ml-6">
+        <div className="lg:mb-8 w-full lg:w-3/5 lg:ml-6 flex flex-col gap-4">
+          <h2
+            className="text-center text-4xl font-bold text-labels-title dark:text-labels-title-drk"
+          >
+            Último proyecto registrado
+          </h2>
           <ShowLastProject project={lastProject} />
         </div>
       </div>
 
-      <div className="flex flex-col lg:flex-row justify-between mx-4 sm:mx-8 lg:mx-10 xl:mx-32 p-4">
-        <div className="w-full lg:w-3/5 xl:ml-6">
+      <div className="flex flex-col lg:flex-row justify-between items-center p-4 mx-4 sm:mx-8 lg:mx-10 xl:mx-32 my-4">
+        <div className="w-full lg:w-3/5 mb-10 lg:mb-0 xl:ml-6">
           <ProyectsCount />
         </div>
         <Text segments={[
           { text: t('Feature 4'), color: "text-primary-700 dark:text-primary-200", size: "text-2xl sm:text-3xl", breakAfter: true },
           { text: t('Feature 4 desc') }
-        ]} fontSize="text-xl sm:text-2xl" className="w-full xl:w-2/6 ml-auto" />
+        ]} fontSize="text-xl sm:text-2xl" className="w-full lg:w-2/5 xl:w-2/6 ml-auto lg:pl-12 xl:pl-0" />
       </div>
 
       <SeparatorLine className={"mx-4 sm:mx-8 lg:mx-10 xl:mx-32 sm:my-10 flex-row-reverse"} />

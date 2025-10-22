@@ -6,6 +6,7 @@ import TechnologiesLabels from "@/components/TechnologiesLabels";
 import { EditIcon, RefreshIcon, TrashIcon } from "@/components/icons";
 import Link from "next/link";
 import Image from "next/image";
+import Button from "@/components/buttons/Button";
 
 interface Props {
     project: ShowProject;
@@ -65,31 +66,14 @@ export default function ProjectCard({ project, session, deleted }: Props) {
                 <div className="flex gap-2 items-center">
                     {session && (
                         <>
-                            <Link
-                                href={`projects/${project.slug}/edit`}
-                                className={`items-center px-3 py-2 transition-colors bg-primary-100 dark:bg-primary-600 hover:bg-primary-200 dark:hover:bg-primary-700 rounded-lg`}
-                            >
-                                <EditIcon size={20} />
-                            </Link>
-                            <div
-                                className={`items-center px-3 pt-2 pb-1 transition-colors bg-primary-100 dark:bg-primary-600 hover:bg-primary-200 dark:hover:bg-primary-700 rounded-lg`}
-                            >
-                                {!deleted ?
-                                    <TrashIcon size={20} onClick={() => handleToggleProject(project.slug, !deleted)} />
-                                    :
-                                    <RefreshIcon size={20} onClick={() => handleToggleProject(project.slug, !deleted)} />
-                                }
-                            </div>
+                            <Button link={`projects/${project.slug}/edit`} icon={<EditIcon size={20} />} size="square" />
+                            <Button size="square" type="action"
+                                icon={!deleted ? <TrashIcon size={20} /> : <RefreshIcon size={20} />}
+                                onClick={() => handleToggleProject(project.slug, !deleted)}
+                            />
                         </>
                     )}
-                    <a
-                        href={`/projects/${project.slug}`}
-                        className={`items-center px-3 py-2 transition-colors bg-primary-100 dark:bg-primary-600 hover:bg-primary-200 dark:hover:bg-primary-700 rounded-lg`}
-                    >
-                        <span className="text-sm text-center text-primary-950 dark:text-white">
-                            Ver detalles
-                        </span>
-                    </a>
+                    <Button size="sm" text="Ver detalles" link={`/projects/${project.slug}`} />
                 </div>
 
                 <TechnologiesLabels

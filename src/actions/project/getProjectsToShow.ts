@@ -8,7 +8,7 @@ export async function getProjectsToShow(isDeleted: boolean) {
       deleted: isDeleted,
     },
     orderBy: {
-      createdAt: "desc",
+      startAt: "desc",
     },
     include: {
       images: {

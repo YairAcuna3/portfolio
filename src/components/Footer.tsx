@@ -11,6 +11,7 @@ export default function Footer() {
                     size={40}
                     darkColor="white"
                     lightColor="var(--color-primary-100)"
+                    href="/"
                 />
                 <div className="flex flex-col sm:flex-row">
                     <p className="text-primary-100 dark:text-white mr-2">

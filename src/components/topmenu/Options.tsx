@@ -2,8 +2,8 @@
 
 import { logoutUser } from "@/actions/access/logoutUser";
 import { LoginIcon, LogoutIcon, PlusSquareIcon, TrashIcon } from "../icons";
-import ButtonTopMenu from "./ButtonTopMenu";
 import { useTranslations } from "next-intl";
+import Button from "../buttons/Button";
 
 interface Props {
     session: boolean;
@@ -12,16 +12,13 @@ interface Props {
 
 export default function Options({ session, className }: Props) {
     const t = useTranslations('Layout.TopButtons');
-
-    async function handleLogout() {
-        await logoutUser();
-    }
+    async function handleLogout() { await logoutUser(); }
 
     return (
         <div className={className}>
             {session &&
                 <div className="order-2 md:order-1 flex flex-col md:flex-row gap-4">
-                    <ButtonTopMenu text="Register" link="/register" />
+                    <Button text="Register" link="/register" />
                     <LoginIcon
                         size={40}
                         darkColor="white"
@@ -51,9 +48,8 @@ export default function Options({ session, className }: Props) {
                 </div>
             }
             <div className="order-1 md:order-2 flex flex-col md:flex-row mb-4 md:mb-0 gap-4">
-
-                <ButtonTopMenu text={t('Projects')} link="/projects" />
-                <ButtonTopMenu text={t('Contact')} link="/contact" />
+                <Button text={t('Projects')} link="/projects" />
+                <Button text={t('Contact')} link="/contact" />
             </div>
         </div>
     );

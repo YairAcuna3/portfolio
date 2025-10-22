@@ -13,4 +13,5 @@ export { default as YairAcunaIcon } from "./IconYairAcuna";
 export { default as LoginIcon } from "./IconLogIn";
 export { default as LogoutIcon } from "./IconLogOut";
 export { default as PlusSquareIcon } from "./IconSquarePlus";
+export { default as ExternalLinkIcon } from "./IconExternalLink";
 //export { default as YouTubeIcon } from "./IconYoutube";

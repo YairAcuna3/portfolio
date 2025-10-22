@@ -61,3 +61,14 @@ model User {
   password  String
   createdAt DateTime @default(now())
 }
+
+model Experience {
+  id                 String   @id @default(uuid())
+  company            String
+  companyDescription String?
+  startAt            DateTime
+  endAt              DateTime
+  position           String
+  work               Json?
+  createdAt          DateTime @default(now())
+}
