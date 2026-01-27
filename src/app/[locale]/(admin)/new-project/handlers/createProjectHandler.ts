@@ -97,8 +97,8 @@ export const createProjectHandler = async (
     }
 
     setIsLoading(false);
-    {
-      setIsGreatAlert && setIsGreatAlert(true);
+    if (setIsGreatAlert) {
+      setIsGreatAlert(true);
     }
   } catch (error) {
     console.error("The project cannot be created :(", error);

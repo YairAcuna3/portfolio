@@ -1,6 +1,7 @@
 import FormRegister from "./components/FormRegister";
 import { Text } from "@/components/typography/Text";
 import SeparatorLine from "@/components/SeparatorLine";
+import Link from "next/link";
 
 export default function RegisterPage() {
     return (
@@ -32,12 +33,12 @@ export default function RegisterPage() {
                 <div className="text-center mt-6">
                     <p className="text-sm text-gray-600 dark:text-gray-400">
                         ¿Ya tienes cuenta?{" "}
-                        <a
+                        <Link
                             href="/login"
                             className="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium transition-colors"
                         >
                             Inicia sesión aquí
-                        </a>
+                        </Link>
                     </p>
                 </div>
             </div>

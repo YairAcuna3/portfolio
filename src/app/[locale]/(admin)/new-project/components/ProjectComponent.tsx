@@ -30,7 +30,7 @@ export default function ProjectComponent({ project }: Props) {
     const [isModalTech, setIsModalTech] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [isGreatAlert, setIsGreatAlert] = useState(false);
-    const isEditing = useMemo(() => Boolean(project?.id), []);
+    const isEditing = useMemo(() => Boolean(project?.id), [project?.id]);
 
     const handleCloseAlert = () => {
         setIsGreatAlert(false);

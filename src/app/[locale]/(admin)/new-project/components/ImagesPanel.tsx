@@ -57,12 +57,17 @@ export default function ImagesPanel({
         }
 
         if (validFiles.length > 0) {
+            // Create a proper FileList-like object
+            const fileList = Object.assign(validFiles, {
+                item: (index: number) => validFiles[index] || null,
+            }) as unknown as FileList;
+
             // Crear un evento sintético con solo los archivos válidos
             const syntheticEvent = {
                 ...e,
                 target: {
                     ...e.target,
-                    files: validFiles as any
+                    files: fileList
                 }
             };
             onAddImage(syntheticEvent as React.ChangeEvent<HTMLInputElement>);

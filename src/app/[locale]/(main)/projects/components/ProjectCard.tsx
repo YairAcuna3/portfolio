@@ -8,7 +8,6 @@ import Link from "next/link";
 import { formatDate } from "@/utils/formatDate";
 import Image from "next/image";
 import { useBreakpoint } from "@/hooks/useBreakpoints";
-import { useEffect, useState } from "react";
 import Button from "@/components/buttons/Button";
 
 interface Props {

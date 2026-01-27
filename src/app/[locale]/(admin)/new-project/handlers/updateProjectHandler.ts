@@ -4,7 +4,6 @@ import { updateProject } from "@/actions/project/updateProject";
 import { updateTechnologiesOfProject } from "@/actions/technology/updateTechsOfProject";
 import { CreateProjectHandlerProps, OnlyTechnology, OnlyImage } from "@/types";
 import { UploadApiResponse } from "cloudinary";
-import { prisma } from "@/lib/prisma";
 
 type UpdateProjectProps = CreateProjectHandlerProps & {
   id: string;
@@ -114,8 +113,8 @@ export const updateProjectHandler = async (
     }
 
     setIsLoading(false);
-    {
-      setIsGreatAlert && setIsGreatAlert(true);
+    if (setIsGreatAlert) {
+      setIsGreatAlert(true);
     }
   } catch (error) {
     console.error("The project cannot be uploaded :(", error);

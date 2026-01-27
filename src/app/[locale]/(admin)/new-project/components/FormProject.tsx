@@ -33,7 +33,7 @@ export default function FormProject({
     projectId,
     currentImageUrls,
 }: FormProjectProps) {
-    const isEditing = useMemo(() => Boolean(projectId), []);
+    const isEditing = useMemo(() => Boolean(projectId), [projectId]);
 
     return (
         <>
@@ -43,9 +43,7 @@ export default function FormProject({
 
             <form
                 onSubmit={(e) => {
-                    e.preventDefault();
-                    isEditing
-                        ?
+                    if (isEditing) {
                         updateProjectHandler(e, {
                             projectTechs,
                             imageFiles,
@@ -55,8 +53,9 @@ export default function FormProject({
                             details,
                             id: projectId,
                             currentImageUrls,
-                        })
-                        : createProjectHandler(e, {
+                        });
+                    } else {
+                        createProjectHandler(e, {
                             projectTechs,
                             imageFiles,
                             links,
@@ -64,6 +63,7 @@ export default function FormProject({
                             setIsGreatAlert,
                             details,
                         });
+                    }
                 }}
                 className="mb-8">
                 <div className="flex flex-col gap-4 mb-4">

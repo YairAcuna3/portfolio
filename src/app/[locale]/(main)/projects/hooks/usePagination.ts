@@ -1,10 +1,5 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 
-interface PaginationConfig {
-  mobile: number;
-  desktop: number;
-}
-
 export const usePagination = <T>(
   items: T[],
   itemsPerPage: number,
