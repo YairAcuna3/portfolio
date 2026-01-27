@@ -13,7 +13,7 @@ export async function getProjectsToShow(isDeleted: boolean) {
     include: {
       images: {
         take: 1,
-        orderBy: { createdAt: "asc" },
+        orderBy: { order: "asc" },
       },
       technologies: true,
     },

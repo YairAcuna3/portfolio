@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import GreatAlert from '@/components/GreatAlert';
 import LoadingOverlay from '@/components/LoadingOverlay';
 import { OnlyTechnology, Project } from '@/types';
@@ -14,9 +15,10 @@ interface Props {
 }
 
 export default function ProjectComponent({ project }: Props) {
+    const router = useRouter();
     const [technologies, setTechnologies] = useState<OnlyTechnology[]>([]);
     const { projectTechs, addTechnology, removeTechnology } = useTechnologies(project?.technologies);
-    const { imageFiles, imageUrls, addImage, removeImageFile, removeImageUrl } = useImageFiles(project?.images);
+    const { imageFiles, imageUrls, addImage, removeImageFile, removeImageUrl, reorderImageFiles, reorderImageUrls } = useImageFiles(project?.images);
     const { links, addLink, removeLink } = useLinks(project?.links);
     const { details, setName, setDescription, setType, setMadeFor, setStartAt } = useProjectDetails({
         name: project?.name ?? "",
@@ -29,6 +31,11 @@ export default function ProjectComponent({ project }: Props) {
     const [isLoading, setIsLoading] = useState(false);
     const [isGreatAlert, setIsGreatAlert] = useState(false);
     const isEditing = useMemo(() => Boolean(project?.id), []);
+
+    const handleCloseAlert = () => {
+        setIsGreatAlert(false);
+        router.push('/projects');
+    };
 
     useEffect(() => {
         const fetchTechnologies = async () => {
@@ -71,6 +78,7 @@ export default function ProjectComponent({ project }: Props) {
                             setStartAt={setStartAt}
 
                             projectId={project?.id || ""}
+                            currentImageUrls={imageUrls}
                         />
                     </div>
 
@@ -83,6 +91,8 @@ export default function ProjectComponent({ project }: Props) {
                             onAddImage={addImage}
                             removeImageFile={removeImageFile}
                             removeImageUrl={removeImageUrl}
+                            reorderImageFiles={reorderImageFiles}
+                            reorderImageUrls={reorderImageUrls}
                         />
                     </div>
                 </div>
@@ -106,7 +116,7 @@ export default function ProjectComponent({ project }: Props) {
             />
             <GreatAlert
                 isOpen={isGreatAlert}
-                onClose={() => setIsGreatAlert(false)}
+                onClose={handleCloseAlert}
                 title={isEditing ? "¡Congratulations!" : "¡Felicidades!"}
                 text={isEditing ? "Se actualizó el proyecto uwu" : "Se creó el proyecto xddd"}
             />

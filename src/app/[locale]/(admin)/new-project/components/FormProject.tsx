@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { CreateProjectHandlerProps } from "@/types/project";
-import { useRouter } from "next/navigation";
+import { OnlyImage } from "@/types/image";
 import { createProjectHandler, updateProjectHandler } from "../handlers";
 
 type FormProjectProps = CreateProjectHandlerProps & {
@@ -12,6 +12,7 @@ type FormProjectProps = CreateProjectHandlerProps & {
     setMadeFor: (madeFor: string) => void;
     setStartAt: (startAt: Date | null) => void;
     projectId: string;
+    currentImageUrls: OnlyImage[];
 };
 
 export default function FormProject({
@@ -30,8 +31,8 @@ export default function FormProject({
     setStartAt,
 
     projectId,
+    currentImageUrls,
 }: FormProjectProps) {
-    const router = useRouter();
     const isEditing = useMemo(() => Boolean(projectId), []);
 
     return (
@@ -50,9 +51,10 @@ export default function FormProject({
                             imageFiles,
                             links,
                             setIsLoading,
+                            setIsGreatAlert,
                             details,
                             id: projectId,
-                            router,
+                            currentImageUrls,
                         })
                         : createProjectHandler(e, {
                             projectTechs,

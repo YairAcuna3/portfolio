@@ -11,7 +11,9 @@ export async function getLastProject() {
       startAt: "desc",
     },
     include: {
-      images: true,
+      images: {
+        orderBy: { order: "asc" },
+      },
       technologies: true,
     },
   });

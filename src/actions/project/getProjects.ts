@@ -11,7 +11,9 @@ export async function getProjects(isDeleted: boolean) {
       createdAt: "desc",
     },
     include: {
-      images: true,
+      images: {
+        orderBy: { order: "asc" },
+      },
       technologies: true,
       links: true,
     },

@@ -14,7 +14,7 @@ export const createProjectHandler = async (
     setIsLoading,
     setIsGreatAlert,
     details,
-  }: CreateProjectHandlerProps
+  }: CreateProjectHandlerProps,
 ) => {
   e.preventDefault();
   setIsLoading(true);
@@ -49,30 +49,43 @@ export const createProjectHandler = async (
     }
 
     if (imageFiles.length > 0) {
+      console.log(`Uploading ${imageFiles.length} images...`);
       const uploadResults = await Promise.all(
         imageFiles.map((file: File) =>
-          uploadImage(file, `portfolio/${createdData.id}`)
-        )
+          uploadImage(file, `portfolio/${createdData.id}`),
+        ),
       );
+
       const urls: string[] = [];
+      const failedUploads: string[] = [];
+
       for (const result of uploadResults) {
         if (result.success) {
           const data = result.data as UploadApiResponse;
           urls.push(data.secure_url);
         } else {
           console.error("Error uploading image:", result.error);
-          throw new Error("Error uploading some image to Cloudinary");
+          failedUploads.push(result.error || "Unknown error");
         }
       }
 
+      if (failedUploads.length > 0) {
+        throw new Error(
+          `Failed to upload ${failedUploads.length} images: ${failedUploads.join(", ")}`,
+        );
+      }
+
       if (urls.length > 0) {
+        console.log(`Saving ${urls.length} image URLs to database...`);
         const imagesCreated = await createImages({
           projectId: createdData.id,
           urls,
+          startOrder: 0,
         });
         if (!imagesCreated.success) {
           throw new Error(imagesCreated.error || "Error saving images in DB");
         }
+        console.log(`Successfully saved ${urls.length} images`);
       }
     }
 

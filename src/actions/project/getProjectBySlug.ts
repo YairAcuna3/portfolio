@@ -8,7 +8,9 @@ export async function getProjectBySlug(slug: string) {
       slug: slug,
     },
     include: {
-      images: true,
+      images: {
+        orderBy: { order: "asc" },
+      },
       technologies: true,
       links: true,
     },

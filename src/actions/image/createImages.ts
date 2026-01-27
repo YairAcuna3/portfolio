@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 type Input = {
   urls: string[];
   projectId: string;
+  startOrder?: number;
 };
 
 type Response = {
@@ -61,10 +62,20 @@ export async function createImages(input: Input): Promise<Response> {
       };
     }
 
+    // Get the highest order number for existing images
+    const maxOrderResult = await prisma.image.findFirst({
+      where: { projectId: input.projectId },
+      orderBy: { order: "desc" },
+      select: { order: true },
+    });
+
+    const startOrder = input.startOrder ?? (maxOrderResult?.order ?? -1) + 1;
+
     await prisma.image.createMany({
-      data: uniqueUrls.map((url) => ({
+      data: uniqueUrls.map((url, index) => ({
         url,
         projectId: input.projectId,
+        order: startOrder + index,
         createdAt: new Date(),
       })),
       skipDuplicates: true,

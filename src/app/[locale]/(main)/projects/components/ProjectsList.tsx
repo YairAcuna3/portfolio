@@ -3,12 +3,13 @@
 import { ShowProject } from "@/types/project";
 import ProjectsHeader from "./ProjectsHeader";
 import ProjectCard from "./ProjectCard";
-import ProjectSquareCard from "./ProjectSquareCards";
-import { useEffect, useState } from "react";
+import Pagination from "./Pagination";
+import { useState } from "react";
 import { useProjects } from "../hooks/useProjects";
+import { usePagination } from "../hooks/usePagination";
+import { useBreakpoint } from "@/hooks/useBreakpoints";
 import { OnlyTechnology } from "@/types";
 import { useTechnologies } from "@/app/[locale]/(admin)/new-project/hooks";
-import { useBreakpoint } from "@/hooks/useBreakpoints";
 
 interface Props {
     projects: ShowProject[];
@@ -18,29 +19,24 @@ interface Props {
 }
 
 export default function ProjectsList({ projects, session, deleted, technologies }: Props) {
-    const [view, setView] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
     const { projectTechs, addTechnology, removeTechnology } = useTechnologies();
     const { showProjects } = useProjects(searchTerm, projects, projectTechs);
+
     const breakpoint = useBreakpoint();
+    const isMobile = breakpoint === "sm" || breakpoint === "md";
 
-    const isSquare = (() => {
-        if (breakpoint === "2xl") {
-            return !view;
-        } else {
-            return true;
-        }
-    })();
-
-    useEffect(() => {
-        setView(breakpoint === "2xl");
-    }, [breakpoint]);
+    const {
+        currentPage,
+        totalPages,
+        paginatedItems: paginatedProjects,
+        goToPage,
+        totalItems
+    } = usePagination(showProjects, 9, isMobile);
 
     return (
         <>
             <ProjectsHeader
-                view={view}
-                setView={setView}
                 projects={showProjects}
                 searchTerm={searchTerm}
                 setSearchTerm={setSearchTerm}
@@ -49,25 +45,34 @@ export default function ProjectsList({ projects, session, deleted, technologies 
                 onAddTechnology={addTechnology}
                 onRemoveTechnology={removeTechnology}
             />
-            <div className={!view ? "p-4 px-32 justify-center w-full flex flex-wrap gap-10" : ""}>
-                {showProjects.map((pro) => (
-                    <div key={pro.id} className={view ? "" : "w-fit"}>
-                        {isSquare ? (
-                            <ProjectSquareCard
-                                project={pro}
-                                session={session}
-                                deleted={deleted}
-                            />
-                        ) : (
-                            <ProjectCard
-                                project={pro}
-                                session={session}
-                                deleted={deleted}
-                            />
-                        )}
+
+            {totalItems > 0 ? (
+                <>
+                    <div className="p-4 px-32 justify-center w-full flex flex-wrap gap-10">
+                        {paginatedProjects.map((pro) => (
+                            <div key={pro.id} className="w-fit">
+                                <ProjectCard
+                                    project={pro}
+                                    session={session}
+                                    deleted={deleted}
+                                />
+                            </div>
+                        ))}
                     </div>
-                ))}
-            </div>
+
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={goToPage}
+                    />
+                </>
+            ) : (
+                <div className="p-4 px-32 justify-center w-full flex">
+                    <p className="text-gray-500 dark:text-gray-400 text-center">
+                        No se encontraron proyectos que coincidan con los filtros aplicados.
+                    </p>
+                </div>
+            )}
         </>
     );
 }

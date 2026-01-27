@@ -31,6 +31,8 @@ import {
   SiRedis,
   SiTerraform,
   SiUnity,
+  SiFastapi,
+  SiSqlite,
 } from "react-icons/si";
 import {
   TbBrandCSharp,
@@ -47,6 +49,8 @@ import { FaHtml5 } from "react-icons/fa";
 import { GrMysql } from "react-icons/gr";
 
 export const iconTechMap = {
+  fastapi: SiFastapi,
+  sqlite: SiSqlite,
   react: SiReact,
   tailwindcss: SiTailwindcss,
   nodejs: SiNodedotjs,

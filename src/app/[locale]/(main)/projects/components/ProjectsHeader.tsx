@@ -1,15 +1,12 @@
 'use client';
 
 import Button from "@/components/buttons/Button";
-import { GridIcon, MenuIcon } from "@/components/icons";
 import ModalTechnologies from "@/components/ModalTechnologies";
 import TechnologiesLabels from "@/components/TechnologiesLabels";
 import { OnlyTechnology, ShowProject } from "@/types";
 import { useState } from "react";
 
 interface Props {
-    view: boolean;
-    setView: (state: boolean) => void;
     projects: ShowProject[];
     searchTerm: string;
     setSearchTerm: (searchTerm: string) => void
@@ -19,34 +16,17 @@ interface Props {
     onRemoveTechnology: (techName: string) => void;
 }
 
-export default function ProjectsHeader({ view, setView, searchTerm, setSearchTerm, technologies, selectedTechs, onAddTechnology, onRemoveTechnology }: Props) {
+export default function ProjectsHeader({ searchTerm, setSearchTerm, technologies, selectedTechs, onAddTechnology, onRemoveTechnology }: Props) {
     const [isModal, setIsModal] = useState(false);
 
     return (
         <div className="flex flex-col justify-center pt-3 px-6 xl:px-32">
-            <div className="flex relative items-center md:mt-6 xl:mt-0">
+            <div className="flex relative items-center md:mt-6 xl:mt-8">
                 <h1
                     className="absolute left-1/2 transform -translate-x-1/2 text-6xl font-extrabold"
                 >
                     Proyectos
                 </h1>
-                <div className="hidden xl:flex items-center xl:ml-auto">
-                    <p
-                        className="mr-2 dark:text-gray-400"
-                    >
-                        Change the view! →
-                    </p>
-                    <button
-                        onClick={() => setView(!view)}
-                        className="flex w-[50px] h-[50px] items-center justify-center bg-btn-drk hover:bg-btn-drk-hover rounded-sm"
-                    >
-                        {view ? (
-                            <GridIcon size={35} darkColor="white" />
-                        ) : (
-                            <MenuIcon size={35} darkColor="white" />
-                        )}
-                    </button>
-                </div>
             </div>
 
             <div className="flex flex-col relative mt-5">

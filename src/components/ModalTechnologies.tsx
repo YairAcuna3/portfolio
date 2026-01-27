@@ -2,6 +2,8 @@
 
 import LensIcon from "@/components/icons/IconLens";
 import { OnlyTechnology } from "@/types/technology";
+import { IconMapTechsKeys } from "@/types/icon";
+import { iconTechMap } from "@/utils/iconTechMap";
 import { useEffect, useState } from "react";
 
 interface TechModalProps {
@@ -71,17 +73,39 @@ export default function ModalTechnologies({ technologies, isOpen, onClose, onAdd
                 </div>
 
                 <div className="h-[50vh] flex flex-col border border-gray-300 rounded-lg mx-4 bg-primary-900">
-                    <div className="overflow-y-auto h-auto text-center">
-                        {suggestions.map((tech) => (
-                            <div
-                                key={tech.name}
-                                onClick={() => handleSelectSuggestion(tech)}
-                                className="flex gap-4 items-center justify-center py-2 cursor-pointer rounded-lg hover:text-white hover:bg-primary-700 transition-colors"
-                            >
-                                {/* Se le puede poner color distinto e ícono */}
-                                {tech.name}
+                    <div className="overflow-y-auto h-auto p-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                            {suggestions.map((tech) => {
+                                const iconTech = tech.icon as IconMapTechsKeys;
+                                const IconComponent = iconTech && iconTech in iconTechMap
+                                    ? iconTechMap[iconTech]
+                                    : null;
+
+                                return (
+                                    <div
+                                        key={tech.name}
+                                        onClick={() => handleSelectSuggestion(tech)}
+                                        className={`flex items-center gap-2 px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 border-2 ${selectedTech?.name === tech.name
+                                                ? 'border-white scale-105'
+                                                : 'border-transparent hover:scale-102'
+                                            }`}
+                                        style={{ backgroundColor: tech.color || "#005F78" }}
+                                    >
+                                        {IconComponent && (
+                                            <IconComponent size={16} className="text-white flex-shrink-0" />
+                                        )}
+                                        <span className="text-white text-sm font-medium truncate">
+                                            {tech.name}
+                                        </span>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        {suggestions.length === 0 && (
+                            <div className="text-center text-primary-300 py-8">
+                                {searchTerm ? 'No se encontraron tecnologías' : 'No hay tecnologías disponibles'}
                             </div>
-                        ))}
+                        )}
                     </div>
                 </div>
 
