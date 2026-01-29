@@ -1,21 +1,34 @@
 "use client";
 
-//TODO: to upload since the client (still unused)
-export async function uploadFile(file: File) {
+export async function uploadFile(file: File, folder?: string): Promise<string> {
   const formData = new FormData();
   formData.append("file", file);
-  formData.append("upload_preset", "tu_upload_preset");
+  if (folder) {
+    formData.append("folder", folder);
+  }
 
-  const res = await fetch(
-    "https://api.cloudinary.com/v1_1/TU_CLOUD_NAME/image/upload",
-    {
-      method: "POST",
-      body: formData,
-    }
-  );
+  const res = await fetch("/api/upload-image", {
+    method: "POST",
+    body: formData,
+  });
 
-  if (!res.ok) throw new Error("Error uploading image on client util");
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw new Error(errorData.error || "Error uploading image");
+  }
 
   const data = await res.json();
-  return data.secure_url as string;
+  if (!data.success) {
+    throw new Error(data.error || "Error uploading image");
+  }
+
+  return data.data.url as string;
+}
+
+export async function uploadMultipleFiles(
+  files: File[],
+  folder?: string,
+): Promise<string[]> {
+  const uploadPromises = files.map((file) => uploadFile(file, folder));
+  return Promise.all(uploadPromises);
 }

@@ -37,7 +37,7 @@ export default function FormProject({
 
     return (
         <>
-            <h2 className="text-2xl font-bold text-primary-200 mb-6 text-center">
+            <h2 className="text-xl sm:text-2xl font-bold text-primary-200 mb-4 sm:mb-6 text-center">
                 {isEditing ? "Editar proyecto" : "Crear proyecto"}
             </h2>
 
@@ -65,8 +65,8 @@ export default function FormProject({
                         });
                     }
                 }}
-                className="mb-8">
-                <div className="flex flex-col gap-4 mb-4">
+                className="mb-6 sm:mb-8">
+                <div className="flex flex-col gap-3 sm:gap-4 mb-4">
                     <div>
                         <label htmlFor="name" className="block text-sm font-medium text-primary-200 mb-2">
                             Nombre
@@ -75,7 +75,7 @@ export default function FormProject({
                             type="text"
                             value={details.name}
                             onChange={(e) => setName(e.target.value)}
-                            className="bg-gray-700 w-full px-4 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+                            className="bg-gray-700 w-full px-3 sm:px-4 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200 text-sm sm:text-base"
                             placeholder="Proyecto demasiado bueno..."
                             required
                         />
@@ -88,7 +88,7 @@ export default function FormProject({
                         <textarea
                             value={details.description || ""}
                             onChange={(e) => setDescription(e.target.value)}
-                            className="resize-none bg-gray-700 w-full h-[200px] px-4 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+                            className="resize-none bg-gray-700 w-full h-[150px] sm:h-[200px] px-3 sm:px-4 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200 text-sm sm:text-base"
                             placeholder="Florea adecuadamente..."
                         />
                     </div>
@@ -101,7 +101,7 @@ export default function FormProject({
                             type="text"
                             value={details.type || ""}
                             onChange={(e) => setType(e.target.value)}
-                            className="bg-gray-700 w-full px-4 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+                            className="bg-gray-700 w-full px-3 sm:px-4 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200 text-sm sm:text-base"
                             placeholder="Web atómica"
                             required
                         />
@@ -115,7 +115,7 @@ export default function FormProject({
                             type="text"
                             value={details.madeFor || ""}
                             onChange={(e) => setMadeFor(e.target.value)}
-                            className="bg-gray-700 w-full px-4 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200"
+                            className="bg-gray-700 w-full px-3 sm:px-4 py-2 border border-primary-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200 text-sm sm:text-base"
                             placeholder="Juventudes hitlerianas"
                             required
                         />
@@ -132,14 +132,14 @@ export default function FormProject({
                             type="date"
                             value={details.startAt ? details.startAt.toISOString().split("T")[0] : ""}
                             onChange={(e) => { setStartAt(e.target.value ? new Date(e.target.value) : null) }}
-                            className="bg-gray-700 w-full px-4 py-2 border border-primary-300 rounded-lg"
+                            className="bg-gray-700 w-full px-3 sm:px-4 py-2 border border-primary-300 rounded-lg text-sm sm:text-base"
                         />
                     </div>
                 </div>
 
                 <button
                     type="submit"
-                    className="cursor-pointer w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-4 mt-1 rounded-lg transition-colors duration-200 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                    className="cursor-pointer w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-2.5 sm:py-3 px-4 mt-1 rounded-lg transition-colors duration-200 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 text-sm sm:text-base"
                 >
                     {isEditing ? "Guardar cambios" : "Crear proyecto"}
                 </button>

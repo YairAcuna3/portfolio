@@ -1,9 +1,9 @@
-import { createImages, uploadImage, reorderImages } from "@/actions/image";
+import { createImages, reorderImages } from "@/actions/image";
 import { updateLinksForProject } from "@/actions/link/updateLinksForProject";
 import { updateProject } from "@/actions/project/updateProject";
 import { updateTechnologiesOfProject } from "@/actions/technology/updateTechsOfProject";
 import { CreateProjectHandlerProps, OnlyTechnology, OnlyImage } from "@/types";
-import { UploadApiResponse } from "cloudinary";
+import { uploadMultipleFiles } from "@/utils/uploadFile";
 
 type UpdateProjectProps = CreateProjectHandlerProps & {
   id: string;
@@ -59,42 +59,29 @@ export const updateProjectHandler = async (
     // Subir nuevas imágenes si las hay
     if (imageFiles.length > 0) {
       console.log(`Uploading ${imageFiles.length} new images...`);
-      const uploadResults = await Promise.all(
-        imageFiles.map((file: File) =>
-          uploadImage(file, `portfolio/${updatedData.id}`),
-        ),
-      );
-
-      const urls: string[] = [];
-      const failedUploads: string[] = [];
-
-      for (const result of uploadResults) {
-        if (result.success) {
-          const data = result.data as UploadApiResponse;
-          urls.push(data.secure_url);
-        } else {
-          console.error("Error uploading image:", result.error);
-          failedUploads.push(result.error || "Unknown error");
-        }
-      }
-
-      if (failedUploads.length > 0) {
-        throw new Error(
-          `Failed to upload ${failedUploads.length} images: ${failedUploads.join(", ")}`,
+      try {
+        const urls = await uploadMultipleFiles(
+          imageFiles,
+          `portfolio/${updatedData.id}`,
         );
-      }
 
-      if (urls.length > 0) {
-        console.log(`Saving ${urls.length} new image URLs to database...`);
-        const imagesCreated = await createImages({
-          projectId: updatedData.id,
-          urls,
-          startOrder: currentImageUrls.length,
-        });
-        if (!imagesCreated.success) {
-          throw new Error(imagesCreated.error || "Error saving images in DB");
+        if (urls.length > 0) {
+          console.log(`Saving ${urls.length} new image URLs to database...`);
+          const imagesCreated = await createImages({
+            projectId: updatedData.id,
+            urls,
+            startOrder: currentImageUrls.length,
+          });
+          if (!imagesCreated.success) {
+            throw new Error(imagesCreated.error || "Error saving images in DB");
+          }
+          console.log(`Successfully saved ${urls.length} new images`);
         }
-        console.log(`Successfully saved ${urls.length} new images`);
+      } catch (uploadError) {
+        console.error("Error uploading images:", uploadError);
+        throw new Error(
+          `Failed to upload images: ${uploadError instanceof Error ? uploadError.message : "Unknown error"}`,
+        );
       }
     }
 

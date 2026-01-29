@@ -9,6 +9,8 @@ import { useImageFiles, useLinks, useProjectDetails, useTechnologies } from '../
 import { FormProject, ImagesPanel, LinksPanel, TechnologiesPanel } from '.';
 import ModalTechnologies from '@/components/ModalTechnologies';
 import { getTechnologies } from '@/actions/technology/getTechnologies';
+import { useBreakpoint } from '@/hooks/useBreakpoints';
+import { addImageToProject } from '@/actions/image';
 
 interface Props {
     project?: Project;
@@ -16,6 +18,7 @@ interface Props {
 
 export default function ProjectComponent({ project }: Props) {
     const router = useRouter();
+    const breakpoint = useBreakpoint();
     const [technologies, setTechnologies] = useState<OnlyTechnology[]>([]);
     const { projectTechs, addTechnology, removeTechnology } = useTechnologies(project?.technologies);
     const { imageFiles, imageUrls, addImage, removeImageFile, removeImageUrl, reorderImageFiles, reorderImageUrls } = useImageFiles(project?.images);
@@ -32,9 +35,32 @@ export default function ProjectComponent({ project }: Props) {
     const [isGreatAlert, setIsGreatAlert] = useState(false);
     const isEditing = useMemo(() => Boolean(project?.id), [project?.id]);
 
+    const isMobile = breakpoint === 'sm' || breakpoint === 'md';
+    const isTablet = breakpoint === 'lg';
+
     const handleCloseAlert = () => {
         setIsGreatAlert(false);
         router.push('/projects');
+    };
+
+    const handleImageUploaded = async (imageUrl: string) => {
+        if (!project?.id) return;
+
+        try {
+            const result = await addImageToProject({
+                projectId: project.id,
+                imageUrl
+            });
+
+            if (result.success) {
+                // Recargar la página para mostrar la nueva imagen
+                // En una implementación más sofisticada, se actualizaría el estado local
+                window.location.reload();
+            }
+        } catch (error) {
+            console.error('Error saving image to database:', error);
+            alert('Error saving image to database');
+        }
     };
 
     useEffect(() => {
@@ -47,10 +73,17 @@ export default function ProjectComponent({ project }: Props) {
 
     return (
         <>
-            <div className="flex flex-col justify-between items-start gap-7 py-20 px-40">
-                <div className='flex gap-7 w-full'>
+            <div className={`flex flex-col justify-between items-start gap-4 sm:gap-6 lg:gap-7 py-4 sm:py-8 lg:py-20 px-4 sm:px-8 lg:px-40`}>
+                {/* Layout responsive para los paneles principales */}
+                <div className={`flex ${isMobile ? 'flex-col' : isTablet ? 'flex-col' : 'flex-row'} gap-4 sm:gap-6 lg:gap-7 w-full`}>
+                    {/* Panel de Tecnologías */}
                     <div
-                        className="flex flex-col bg-gray-800 shadow-lg border border-primary-200 w-1/5 h-[80vh] p-8 items-center justify-between rounded-lg"
+                        className={`flex flex-col bg-gray-800 shadow-lg border border-primary-200 ${isMobile
+                            ? 'w-full h-auto min-h-[300px]'
+                            : isTablet
+                                ? 'w-full h-auto min-h-[400px]'
+                                : 'w-1/5 h-[80vh]'
+                            } p-4 sm:p-6 lg:p-8 items-center justify-between rounded-lg`}
                     >
                         <TechnologiesPanel
                             projectTech={projectTechs}
@@ -59,8 +92,14 @@ export default function ProjectComponent({ project }: Props) {
                         />
                     </div>
 
+                    {/* Panel del Formulario */}
                     <div
-                        className="flex flex-col w-2/5 h-[80vh] justify-between p-6 bg-gray-800 rounded-lg shadow-lg border border-primary-200"
+                        className={`flex flex-col ${isMobile
+                            ? 'w-full h-auto'
+                            : isTablet
+                                ? 'w-full h-auto'
+                                : 'w-2/5 h-[80vh]'
+                            } justify-between p-4 sm:p-6 bg-gray-800 rounded-lg shadow-lg border border-primary-200`}
                     >
                         <FormProject
                             projectTechs={projectTechs}
@@ -82,8 +121,14 @@ export default function ProjectComponent({ project }: Props) {
                         />
                     </div>
 
+                    {/* Panel de Imágenes */}
                     <div
-                        className="flex flex-col bg-gray-800 shadow-lg border border-primary-200 w-2/5 h-[80vh] p-8 items-center justify-between rounded-lg"
+                        className={`flex flex-col bg-gray-800 shadow-lg border border-primary-200 ${isMobile
+                            ? 'w-full h-auto min-h-[400px]'
+                            : isTablet
+                                ? 'w-full h-auto min-h-[500px]'
+                                : 'w-2/5 h-[80vh]'
+                            } p-4 sm:p-6 lg:p-8 items-center justify-between rounded-lg`}
                     >
                         <ImagesPanel
                             imageFiles={imageFiles}
@@ -93,11 +138,15 @@ export default function ProjectComponent({ project }: Props) {
                             removeImageUrl={removeImageUrl}
                             reorderImageFiles={reorderImageFiles}
                             reorderImageUrls={reorderImageUrls}
+                            projectId={project?.id}
+                            onImageUploaded={handleImageUploaded}
                         />
                     </div>
                 </div>
+
+                {/* Panel de Links - Siempre en la parte inferior */}
                 <div
-                    className="flex flex-col bg-gray-800 shadow-lg border border-primary-200 w-full h-auto p-8 items-center justify-between rounded-lg"
+                    className="flex flex-col bg-gray-800 shadow-lg border border-primary-200 w-full h-auto p-4 sm:p-6 lg:p-8 items-center justify-between rounded-lg"
                 >
                     <LinksPanel
                         links={links}
@@ -121,6 +170,6 @@ export default function ProjectComponent({ project }: Props) {
                 text={isEditing ? "Se actualizó el proyecto uwu" : "Se creó el proyecto xddd"}
             />
             <LoadingOverlay isLoading={isLoading} />
-        </ >
+        </>
     );
 }

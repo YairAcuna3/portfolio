@@ -4,6 +4,7 @@ import { TrashIcon } from "@/components/icons";
 import { OnlyImage } from "@/types";
 import Image from "next/image";
 import { useState } from "react";
+import { uploadFile } from "@/utils/uploadFile";
 
 interface Props {
     imageFiles: File[];
@@ -13,6 +14,8 @@ interface Props {
     removeImageUrl: (id: string) => void;
     reorderImageFiles: (startIndex: number, endIndex: number) => void;
     reorderImageUrls: (startIndex: number, endIndex: number) => void;
+    projectId?: string;
+    onImageUploaded?: (url: string) => void;
 }
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
@@ -25,11 +28,16 @@ export default function ImagesPanel({
     removeImageFile,
     removeImageUrl,
     reorderImageFiles,
-    reorderImageUrls
+    reorderImageUrls,
+    projectId,
+    onImageUploaded
 }: Props) {
     const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
     const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const [uploadingFiles, setUploadingFiles] = useState<Set<string>>(new Set());
+    const [uploadProgress, setUploadProgress] = useState<Map<string, number>>(new Map());
+
+    const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files) return;
 
         const files = Array.from(e.target.files);
@@ -57,24 +65,90 @@ export default function ImagesPanel({
         }
 
         if (validFiles.length > 0) {
-            // Create a proper FileList-like object
-            const fileList = Object.assign(validFiles, {
-                item: (index: number) => validFiles[index] || null,
-            }) as unknown as FileList;
+            // Si tenemos projectId, subir directamente
+            if (projectId && onImageUploaded) {
+                await handleDirectUpload(validFiles);
+            } else {
+                // Agregar a la lista temporal para crear proyecto
+                const fileList = Object.assign(validFiles, {
+                    item: (index: number) => validFiles[index] || null,
+                }) as unknown as FileList;
 
-            // Crear un evento sintético con solo los archivos válidos
-            const syntheticEvent = {
-                ...e,
-                target: {
-                    ...e.target,
-                    files: fileList
-                }
-            };
-            onAddImage(syntheticEvent as React.ChangeEvent<HTMLInputElement>);
+                const syntheticEvent = {
+                    ...e,
+                    target: {
+                        ...e.target,
+                        files: fileList
+                    }
+                };
+                onAddImage(syntheticEvent as React.ChangeEvent<HTMLInputElement>);
+            }
         }
 
         // Limpiar el input
         e.target.value = '';
+    };
+
+    const handleDirectUpload = async (files: File[]) => {
+        for (const file of files) {
+            const fileId = `${file.name}-${Date.now()}`;
+            setUploadingFiles(prev => new Set(prev).add(fileId));
+            setUploadProgress(prev => new Map(prev).set(fileId, 0));
+
+            try {
+                // Simular progreso (ya que fetch no tiene progreso real)
+                const progressInterval = setInterval(() => {
+                    setUploadProgress(prev => {
+                        const newMap = new Map(prev);
+                        const current = newMap.get(fileId) || 0;
+                        if (current < 90) {
+                            newMap.set(fileId, current + 10);
+                        }
+                        return newMap;
+                    });
+                }, 200);
+
+                const folder = `portfolio/${projectId}`;
+                const imageUrl = await uploadFile(file, folder);
+
+                clearInterval(progressInterval);
+                setUploadProgress(prev => new Map(prev).set(fileId, 100));
+
+                // Llamar callback con la URL
+                if (onImageUploaded) {
+                    onImageUploaded(imageUrl);
+                }
+
+                // Limpiar estado de subida
+                setTimeout(() => {
+                    setUploadingFiles(prev => {
+                        const newSet = new Set(prev);
+                        newSet.delete(fileId);
+                        return newSet;
+                    });
+                    setUploadProgress(prev => {
+                        const newMap = new Map(prev);
+                        newMap.delete(fileId);
+                        return newMap;
+                    });
+                }, 1000);
+
+            } catch (error) {
+                console.error('Error uploading file:', error);
+                alert(`Error uploading ${file.name}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+
+                setUploadingFiles(prev => {
+                    const newSet = new Set(prev);
+                    newSet.delete(fileId);
+                    return newSet;
+                });
+                setUploadProgress(prev => {
+                    const newMap = new Map(prev);
+                    newMap.delete(fileId);
+                    return newMap;
+                });
+            }
+        }
     };
 
     const combinedImages = [
@@ -124,15 +198,15 @@ export default function ImagesPanel({
 
     return (
         <>
-            <h2 className="text-2xl font-bold text-primary-200 text-center">
+            <h2 className="text-xl sm:text-2xl font-bold text-primary-200 text-center mb-4">
                 Imágenes
             </h2>
-            <div className="h-[60vh] w-full flex flex-col border border-gray-300 rounded-lg mx-4 bg-gray-700">
+            <div className="h-[40vh] sm:h-[50vh] lg:h-[60vh] w-full flex flex-col border border-gray-300 rounded-lg mx-2 sm:mx-4 bg-gray-700">
                 <div className="overflow-y-auto h-full text-center">
                     {combinedImages.map((img, i) => (
                         <div
                             key={img.type === "url" ? img.value.id : `file-${i}`}
-                            className={`flex gap-4 items-center justify-between py-2 px-8 rounded-lg hover:text-white hover:bg-primary-700 transition-colors relative h-[320px] cursor-move ${dragOverIndex === i ? 'bg-primary-600' : ''
+                            className={`flex gap-2 sm:gap-4 items-center justify-between py-2 px-4 sm:px-8 rounded-lg hover:text-white hover:bg-primary-700 transition-colors relative h-[200px] sm:h-[280px] lg:h-[320px] cursor-move ${dragOverIndex === i ? 'bg-primary-600' : ''
                                 } ${draggedIndex === i ? 'opacity-50' : ''}`}
                             draggable
                             onDragStart={(e) => handleDragStart(e, i)}
@@ -140,7 +214,7 @@ export default function ImagesPanel({
                             onDragLeave={handleDragLeave}
                             onDrop={(e) => handleDrop(e, i)}
                         >
-                            <div className="relative w-[91%] h-full rounded-md shadow">
+                            <div className="relative w-[85%] sm:w-[91%] h-full rounded-md shadow">
                                 <Image
                                     src={img.type === "url" ? img.value.url : URL.createObjectURL(img.value)}
                                     alt={img.type === "url" ? `image-${img.value.id}` : img.value.name}
@@ -151,10 +225,10 @@ export default function ImagesPanel({
                                 />
                             </div>
                             <TrashIcon
-                                size={20}
+                                size={18}
                                 darkColor="white"
                                 lightColor="var(--color-primary-200)"
-                                className="cursor-pointer"
+                                className="cursor-pointer flex-shrink-0"
                                 onClick={() =>
                                     img.type === "url"
                                         ? removeImageUrl(img.value.id)
@@ -163,11 +237,29 @@ export default function ImagesPanel({
                             />
                         </div>
                     ))}
+
+                    {/* Mostrar archivos en proceso de subida */}
+                    {Array.from(uploadingFiles).map((fileId) => (
+                        <div key={fileId} className="flex gap-2 sm:gap-4 items-center justify-between py-2 px-4 sm:px-8 rounded-lg bg-primary-600 relative h-[200px] sm:h-[280px] lg:h-[320px]">
+                            <div className="relative w-[85%] sm:w-[91%] h-full rounded-md shadow bg-gray-600 flex items-center justify-center">
+                                <div className="text-white text-center">
+                                    <div className="mb-2">Subiendo...</div>
+                                    <div className="w-full bg-gray-700 rounded-full h-2">
+                                        <div
+                                            className="bg-primary-400 h-2 rounded-full transition-all duration-300"
+                                            style={{ width: `${uploadProgress.get(fileId) || 0}%` }}
+                                        ></div>
+                                    </div>
+                                    <div className="text-sm mt-1">{uploadProgress.get(fileId) || 0}%</div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
 
-            <label className="cursor-pointer w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 text-center block">
-                Subir otra…
+            <label className="cursor-pointer w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-2.5 sm:py-3 px-4 rounded-lg transition-colors duration-200 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 text-center block text-sm sm:text-base mt-4">
+                {projectId ? "Subir y optimizar imagen..." : "Seleccionar imagen..."}
                 <input
                     type="file"
                     accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
