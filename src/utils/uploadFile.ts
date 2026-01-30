@@ -17,18 +17,20 @@ export async function uploadFile(file: File, folder?: string): Promise<string> {
 
     console.log("Upload response status:", res.status);
 
+    // Leer la respuesta una sola vez
+    const responseText = await res.text();
+    console.log("Raw response:", responseText);
+
     // Verificar si la respuesta es válida
     if (!res.ok) {
       let errorMessage = `HTTP error! status: ${res.status}`;
 
       try {
-        const errorData = await res.json();
+        const errorData = JSON.parse(responseText);
         errorMessage = errorData.error || errorMessage;
       } catch (jsonError) {
         console.error("Failed to parse error response as JSON:", jsonError);
-        // Si no podemos parsear el JSON, usar el texto de la respuesta
-        const errorText = await res.text();
-        errorMessage = errorText || errorMessage;
+        errorMessage = responseText || errorMessage;
       }
 
       throw new Error(`Error uploading ${file.name}: ${errorMessage}`);
@@ -37,10 +39,9 @@ export async function uploadFile(file: File, folder?: string): Promise<string> {
     // Intentar parsear la respuesta exitosa
     let data;
     try {
-      data = await res.json();
+      data = JSON.parse(responseText);
     } catch (jsonError) {
       console.error("Failed to parse success response as JSON:", jsonError);
-      const responseText = await res.text();
       throw new Error(
         `Error uploading ${file.name}: Invalid response format. Response: ${responseText}`,
       );
