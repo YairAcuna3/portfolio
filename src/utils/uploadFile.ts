@@ -10,7 +10,7 @@ export async function uploadFile(file: File, folder?: string): Promise<string> {
       formData.append("folder", folder);
     }
 
-    const res = await fetch("/api/upload-simple", {
+    const res = await fetch("/api/upload-image", {
       method: "POST",
       body: formData,
     });

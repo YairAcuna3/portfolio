@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import cloudinary from "@/lib/cloudinary";
-import { UploadApiResponse } from "cloudinary";
-import sharp from "sharp";
+import { v2 as cloudinary } from "cloudinary";
+
+// Configurar Cloudinary directamente
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const ALLOWED_TYPES = [
@@ -18,177 +23,142 @@ export async function GET() {
     success: true,
     message: "Upload endpoint is working",
     timestamp: new Date().toISOString(),
+    cloudinaryConfig: {
+      cloudName: process.env.CLOUDINARY_CLOUD_NAME
+        ? "✓ Configured"
+        : "✗ Missing",
+      apiKey: process.env.CLOUDINARY_API_KEY ? "✓ Configured" : "✗ Missing",
+      apiSecret: process.env.CLOUDINARY_API_SECRET
+        ? "✓ Configured"
+        : "✗ Missing",
+    },
   });
 }
 
 export async function POST(request: NextRequest) {
   console.log("=== UPLOAD API CALLED ===");
-  console.log("Method:", request.method);
-  console.log("URL:", request.url);
-  console.log("Headers:", Object.fromEntries(request.headers.entries()));
 
   try {
-    console.log("Starting image upload process...");
+    // Verificar variables de entorno
+    if (
+      !process.env.CLOUDINARY_CLOUD_NAME ||
+      !process.env.CLOUDINARY_API_KEY ||
+      !process.env.CLOUDINARY_API_SECRET
+    ) {
+      console.error("Missing Cloudinary environment variables");
+      return NextResponse.json(
+        { success: false, error: "Cloudinary configuration missing" },
+        { status: 500 },
+      );
+    }
 
-    // Verificar que el content-type sea correcto
-    const contentType = request.headers.get("content-type");
-    console.log("Content-Type:", contentType);
-
+    console.log("Parsing form data...");
     const formData = await request.formData();
-    console.log("FormData keys:", Array.from(formData.keys()));
-
     const file = formData.get("file") as File;
     const folder = (formData.get("folder") as string) || "portfolio";
 
-    console.log(
-      "File received:",
-      file?.name,
-      "Size:",
-      file?.size,
-      "Type:",
-      file?.type,
-    );
+    console.log("File received:", {
+      name: file?.name,
+      size: file?.size,
+      type: file?.type,
+    });
 
     if (!file) {
-      console.error("No file provided");
       return NextResponse.json(
         { success: false, error: "No file provided" },
         { status: 400 },
       );
     }
 
-    // Validar tamaño del archivo
+    // Validar tamaño
     if (file.size > MAX_FILE_SIZE) {
-      console.error("File too large:", file.size);
       return NextResponse.json(
         {
           success: false,
-          error: `File size too large. Maximum allowed: ${MAX_FILE_SIZE / 1024 / 1024}MB`,
+          error: `File too large. Max: ${MAX_FILE_SIZE / 1024 / 1024}MB`,
         },
         { status: 400 },
       );
     }
 
-    // Validar tipo de archivo
+    // Validar tipo
     if (!ALLOWED_TYPES.includes(file.type)) {
-      console.error("Invalid file type:", file.type);
       return NextResponse.json(
         {
           success: false,
-          error: `Invalid file type. Allowed types: ${ALLOWED_TYPES.join(", ")}`,
+          error: `Invalid file type. Allowed: ${ALLOWED_TYPES.join(", ")}`,
         },
         { status: 400 },
       );
     }
 
-    console.log("Converting file to buffer...");
-    // Convertir archivo a buffer
+    console.log("Converting to buffer...");
     const arrayBuffer = await file.arrayBuffer();
-    const originalBuffer = Buffer.from(arrayBuffer);
-    let processedBuffer: Buffer = originalBuffer;
-
-    // Optimizar y convertir a WebP usando Sharp
-    try {
-      console.log("Optimizing image with Sharp...");
-      const sharpInstance = sharp(originalBuffer);
-      const optimizedBuffer = await sharpInstance
-        .webp({
-          quality: 85, // Calidad del 85%
-          effort: 6, // Máximo esfuerzo de compresión
-        })
-        .resize(1920, 1080, {
-          fit: "inside",
-          withoutEnlargement: true,
-        })
-        .toBuffer();
-
-      processedBuffer = optimizedBuffer;
-      console.log("Image optimized successfully");
-    } catch (sharpError) {
-      console.error("Error optimizing image with Sharp:", sharpError);
-      // Si falla la optimización, usar el buffer original
-      processedBuffer = originalBuffer;
-    }
+    const buffer = Buffer.from(arrayBuffer);
 
     console.log("Uploading to Cloudinary...");
-    // Subir a Cloudinary con timeout y retry
-    const result: UploadApiResponse = await new Promise((resolve, reject) => {
-      const timeout = setTimeout(() => {
-        reject(new Error("Upload timeout: Request took too long"));
-      }, 120000); // 2 minutos timeout
 
-      const uploadStream = cloudinary.uploader.upload_stream(
-        {
-          folder: folder,
-          resource_type: "image",
-          format: "webp", // Forzar formato WebP
-          quality: "auto:good",
-          fetch_format: "auto",
-          transformation: [
-            { width: 1920, height: 1080, crop: "limit" },
-            { quality: "auto:good" },
-            { fetch_format: "auto" },
-          ],
-        },
-        (error, result) => {
-          clearTimeout(timeout);
-
-          if (error) {
-            console.error("Cloudinary upload error:", error);
-            reject(
-              new Error(
-                `Cloudinary error: ${error.message || "Unknown cloudinary error"}`,
-              ),
-            );
-          } else if (!result) {
-            console.error("Cloudinary upload failed: No result returned");
-            reject(new Error("Cloudinary upload failed: No result returned"));
-          } else {
-            console.log("Cloudinary upload successful:", result.public_id);
-            resolve(result as UploadApiResponse);
-          }
-        },
-      );
-
-      // Escribir el buffer al stream
-      try {
-        uploadStream.end(processedBuffer);
-      } catch (streamError) {
-        clearTimeout(timeout);
-        console.error("Error writing to upload stream:", streamError);
-        reject(
-          new Error(
-            `Stream error: ${streamError instanceof Error ? streamError.message : "Unknown stream error"}`,
-          ),
-        );
-      }
+    // Subir a Cloudinary usando Promise
+    const result = await new Promise((resolve, reject) => {
+      cloudinary.uploader
+        .upload_stream(
+          {
+            folder: folder,
+            resource_type: "image",
+            quality: "auto:good",
+            fetch_format: "auto",
+          },
+          (error, result) => {
+            if (error) {
+              console.error("Cloudinary error:", error);
+              reject(error);
+            } else if (!result) {
+              reject(new Error("No result from Cloudinary"));
+            } else {
+              console.log("Upload successful:", result.public_id);
+              resolve(result);
+            }
+          },
+        )
+        .end(buffer);
     });
 
-    const responseData = {
+    // Verificar que result tenga las propiedades necesarias
+    if (!result || typeof result !== "object" || !("secure_url" in result)) {
+      throw new Error("Invalid result from Cloudinary");
+    }
+
+    const cloudinaryResult = result as {
+      secure_url: string;
+      public_id: string;
+      width: number;
+      height: number;
+      format: string;
+      bytes: number;
+    };
+
+    return NextResponse.json({
       success: true,
       data: {
-        url: result.secure_url,
-        publicId: result.public_id,
-        width: result.width,
-        height: result.height,
-        format: result.format,
-        bytes: result.bytes,
+        url: cloudinaryResult.secure_url,
+        publicId: cloudinaryResult.public_id,
+        width: cloudinaryResult.width,
+        height: cloudinaryResult.height,
+        format: cloudinaryResult.format,
+        bytes: cloudinaryResult.bytes,
       },
-    };
-
-    console.log("Upload completed successfully:", responseData.data.publicId);
-    return NextResponse.json(responseData);
+    });
   } catch (error) {
-    console.error("Error uploading image:", error);
+    console.error("Upload error:", error);
     const errorMessage =
-      error instanceof Error ? error.message : "Unknown error occurred";
+      error instanceof Error ? error.message : "Unknown error";
 
-    // Asegurar que siempre devolvemos un JSON válido
-    const errorResponse = {
-      success: false,
-      error: `Failed to upload image: ${errorMessage}`,
-    };
-
-    return NextResponse.json(errorResponse, { status: 500 });
+    return NextResponse.json(
+      {
+        success: false,
+        error: `Upload failed: ${errorMessage}`,
+      },
+      { status: 500 },
+    );
   }
 }
