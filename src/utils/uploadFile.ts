@@ -25,6 +25,18 @@ export async function uploadFile(file: File, folder?: string): Promise<string> {
     if (!res.ok) {
       let errorMessage = `HTTP error! status: ${res.status}`;
 
+      // Manejo específico para error 405
+      if (res.status === 405) {
+        errorMessage =
+          "Method Not Allowed - The upload endpoint may not be properly configured";
+        console.error("405 Error Details:", {
+          url: res.url,
+          status: res.status,
+          statusText: res.statusText,
+          headers: Object.fromEntries(res.headers.entries()),
+        });
+      }
+
       try {
         const errorData = JSON.parse(responseText);
         errorMessage = errorData.error || errorMessage;
